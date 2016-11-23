@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Note 0.1.1</string>
+    <string name="toolbar_title">Note</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+    <string name="fab_item_title_camera">拍照</string>
+    <string name="fab_item_title_record">录音</string>
+    <string name="fab_item_title_handwriting">手写</string>
+    <string name="fab_item_title_note">记事</string>
+    <string name="drawer_sync">同步</string>
+</resources>

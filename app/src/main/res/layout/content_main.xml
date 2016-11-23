@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:toolbar="http://schemas.android.com/tools">
+    <!--toolbar-->
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:titleTextColor="@color/colorWhite"
+        android:elevation="2dp"
+        android:background="@color/colorPrimary"
+        app:navigationIcon="@drawable/ic_btn_slide_bar"
+        >
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="@string/toolbar_title"
+            android:textColor="#ffffffff"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_search2"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            />
+    </android.support.v7.widget.Toolbar>
+    <!--下拉刷新-->
+    <android.support.v4.widget.SwipeRefreshLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+        android:layout_marginTop="75dp"
+    android:id="@+id/swipe_refresh_layout">
+    <!--RecycleView-->
+    <include layout="@layout/list_item"></include>
+    </android.support.v4.widget.SwipeRefreshLayout>
+    <!--btn_add-->
+    <io.github.yavski.fabspeeddial.FabSpeedDial
+        android:id="@+id/fab_speed_dial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:fabGravity="bottom_end"
+        app:fabMenu="@menu/fab_toolbar_item"
+        app:fabBackgroundTint="@color/colorAccent"
+        app:miniFabBackgroundTint="@color/colorWhite"
+        app:miniFabDrawableTint="@color/colorGray"
+        app:miniFabTitleTextColor="@color/colorGray" />
+
+</android.support.design.widget.CoordinatorLayout>
