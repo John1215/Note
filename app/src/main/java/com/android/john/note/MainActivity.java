@@ -5,17 +5,25 @@ created by john
  */
 import android.graphics.drawable.Drawable;
 import android.support.design.internal.NavigationMenu;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.menu.MenuAdapter;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.john.note_01.R;
 
@@ -37,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     //圆形头像
     private CircleImageView icon;
+    private TextView title;
     //侧滑栏按钮
     private ListView drawer_btn_list;
     private List<String> choices;
@@ -64,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
         //工具栏
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
+        title=(TextView)findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
+
         //圆形头像
         icon=(CircleImageView)findViewById(R.id.circleImageView);
         //icon.setImageDrawable(Drawable.createFromPath("/sdcard/01.jpg"));
@@ -128,5 +139,26 @@ public class MainActivity extends AppCompatActivity {
 //                return super.onMenuItemSelected(item);
 //            }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_search, menu);
+        MenuItem search=menu.findItem(R.id.menu_items_search);
+        SearchView searchView = (SearchView)search.getActionView();
+//        MenuItemCompat.setOnActionExpandListener(search, new MenuItemCompat.OnActionExpandListener() {
+//            @Override
+//            public boolean onMenuItemActionCollapse(MenuItem item) {
+//               title.setVisibility(View.VISIBLE);
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onMenuItemActionExpand(MenuItem item) {
+//               // title.setVisibility(View.GONE);
+//                return true;
+//            }
+//        });
+
+         return true;
     }
 }
