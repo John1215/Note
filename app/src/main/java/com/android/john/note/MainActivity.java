@@ -3,6 +3,7 @@ package com.android.john.note;
 created by john
 
  */
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.design.internal.NavigationMenu;
 import android.support.v4.view.MenuItemCompat;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     //圆形头像
     private CircleImageView icon;
     private TextView title;
+    private EditText mEditText;
     //侧滑栏按钮
     private ListView drawer_btn_list;
     private List<String> choices;
@@ -75,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("");
         title=(TextView)findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
-
         //圆形头像
         icon=(CircleImageView)findViewById(R.id.circleImageView);
         //icon.setImageDrawable(Drawable.createFromPath("/sdcard/01.jpg"));
@@ -145,20 +147,8 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar_search, menu);
         MenuItem search=menu.findItem(R.id.menu_items_search);
         SearchView searchView = (SearchView)search.getActionView();
-//        MenuItemCompat.setOnActionExpandListener(search, new MenuItemCompat.OnActionExpandListener() {
-//            @Override
-//            public boolean onMenuItemActionCollapse(MenuItem item) {
-//               title.setVisibility(View.VISIBLE);
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onMenuItemActionExpand(MenuItem item) {
-//               // title.setVisibility(View.GONE);
-//                return true;
-//            }
-//        });
-
+       mEditText=(SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
+       mEditText.setHint(R.string.search_hint);
          return true;
     }
 }

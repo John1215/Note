@@ -3,12 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     xmlns:app="http://schemas.android.com/apk/res-auto"
 <item android:id="@+id/menu_items_search"
-    android:title=""
     app:actionViewClass="android.support.v7.widget.SearchView"
     app:showAsAction="always|collapseActionView"
     android:icon="@drawable/ic_search"
-    android:queryHint="搜索"
-
+    android:title=" "
     />
 
     <!--<item android:id="@+id/menu_item_clear"-->
@@ -17,3 +15,4 @@
 
 
 </menu>
+    <!--android:title="搜索"-->

@@ -13,5 +13,4 @@
         <item name="overlapAnchor">false</item>
         <item name="actionMenuTextColor">@color/colorWhite</item>
     </style>
-
 </resources>
