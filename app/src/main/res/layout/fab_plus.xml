@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus
+    android:id="@+id/FabPlus"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:switchFabColor="@color/colorAccent"
+    app:switchFabIcon="@drawable/ic_fab_add"
+    app:layout_behavior="com.lzp.floatingactionbuttonplus.FabBehavior"
+    app:mBackgroundColor="#98ffffff"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.lzp.floatingactionbuttonplus.FabTagLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tagText="@string/fab_item_title_note"
+        >
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_fab_item_note"
+            app:backgroundTint="@color/colorWhite"
+            app:fabSize="mini" />
+    </com.lzp.floatingactionbuttonplus.FabTagLayout>
+
+    <com.lzp.floatingactionbuttonplus.FabTagLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tagText="@string/fab_item_title_note"
+        >
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_fab_item_camera"
+            app:backgroundTint="@color/colorWhite"
+            app:fabSize="mini" />
+    </com.lzp.floatingactionbuttonplus.FabTagLayout>
+
+    <com.lzp.floatingactionbuttonplus.FabTagLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tagText="@string/fab_item_title_handwriting"
+        >
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_fab_item_handwriting"
+            app:backgroundTint="@color/colorWhite"
+            app:fabSize="mini" />
+    </com.lzp.floatingactionbuttonplus.FabTagLayout>
+
+
+
+
+</com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus>

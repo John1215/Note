@@ -3,22 +3,21 @@ package com.android.john.note;
 created by john
 
  */
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.design.internal.NavigationMenu;
-import android.support.v4.view.MenuItemCompat;
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.view.menu.MenuAdapter;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -28,14 +27,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.john.note_01.R;
+import com.lzp.floatingactionbuttonplus.FabTagLayout;
+import com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus;
+import com.yanzhenjie.recyclerview.swipe.Closeable;
+import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
+
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 import circleimageview.CircleImageView;
-import io.github.yavski.fabspeeddial.FabSpeedDial;
-import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -53,6 +60,18 @@ public class MainActivity extends AppCompatActivity {
     private ListView drawer_btn_list;
     private List<String> choices;
     private List<Integer> choiceIcon;
+    private ListView listView;
+    private List<ItemShowObj> mData;
+    private MainListAdapter recyclerAdapter;
+    private FloatingActionButtonPlus fab;
+    private SwipeMenuRecyclerView swipeMenuRecyclerView;
+    private Activity mContext;
+
+
+    private RecyclerViewSwipe recyclerView;
+    private LinearLayoutManager manager;
+
+
 
 
     //状态栏透明
@@ -68,22 +87,39 @@ public class MainActivity extends AppCompatActivity {
         win.setAttributes(winParams);
     }
 
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    swipeRefreshLayout.setRefreshing(false);
+                    recyclerAdapter.notifyDataSetChanged();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTranslucentStatus(true);
+        mContext=this;
         setContentView(R.layout.activity_main);
         //工具栏
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         title=(TextView)findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
+        //静态测试数据
+        initData();
         //圆形头像
         icon=(CircleImageView)findViewById(R.id.circleImageView);
         //icon.setImageDrawable(Drawable.createFromPath("/sdcard/01.jpg"));
-
         //侧滑实现
-        drawerLayout=(DrawerLayout)findViewById(R.id.draw_layout);
+        drawerLayout=(DrawerLayout)findViewById(R.id.drawlayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close
@@ -106,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         ListAdapter adapter = new com.android.john.note.MenuAdapter(this,choices,choiceIcon);
         drawer_btn_list.setAdapter(adapter);
         //下拉刷新实现
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefreshlayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -114,41 +150,82 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        //Collections.reverse(mData);
+                        Collections.reverse(mData);
                         try {
                             Thread.sleep(1000); //模拟耗时,测试
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                       // Handler.sendEmptyMessage(1);
+                        mHandler.sendEmptyMessage(1);
                     }
                 }).start();
             }
         });
-        //浮动按钮
-        FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed_dial);
-        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
-            @Override
-            public boolean onPrepareMenu(NavigationMenu navigationMenu) {
-                return true;
-            }
+       //RecyclerView
+        recyclerView=(RecyclerViewSwipe) findViewById(R.id.recycleview);
+        manager = new LinearLayoutManager(getApplicationContext());
+        recyclerAdapter = new MainListAdapter(mData,getApplicationContext());
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(recyclerAdapter);
 
-//            public boolean onOptionsItemSelected(MenuItem item) {
-//                if (item.getItemId() == android.R.id.home) {
-//                    finish();
-//                    return true;
-//                }
-//                return super.onMenuItemSelected(item);
-//            }
+        //浮动按钮
+
+        fab=(FloatingActionButtonPlus)findViewById(R.id.FabPlus);
+        fab.setPosition(FloatingActionButtonPlus.POS_RIGHT_BOTTOM);
+        fab.setAnimation(FloatingActionButtonPlus.ANIM_SCALE);
+        fab.setAnimationDuration(150);
+        fab.setOnItemClickListener(new FloatingActionButtonPlus.OnItemClickListener() {
+            @Override
+            public void onItemClick(FabTagLayout tagView, int position) {
+                Toast.makeText(MainActivity.this, "Click btn" + position, Toast.LENGTH_SHORT).show();
+                if(position==1){
+                    Toast.makeText(MainActivity.this,"hello", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_search, menu);
         MenuItem search=menu.findItem(R.id.menu_items_search);
         SearchView searchView = (SearchView)search.getActionView();
-       mEditText=(SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
-       mEditText.setHint(R.string.search_hint);
-         return true;
+        mEditText=(SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
+        mEditText.setHint(R.string.search_hint);
+        return true;
     }
+
+//静态测试数据
+    private void initData() {
+        mData = new ArrayList<ItemShowObj>();
+        ItemShowObj obj1 = new ItemShowObj("无Bug无法尽快付款减肥搞飞纷纷就能付款呢机哥","2016.11.27","如果看人家搞看人家过年公开日公开认购公开日公开认购你个人看过基坑丰富和开发及客人就分开万积分空间访客积分你就能进风口九分裤客服即可放假无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#FBC02D");
+        mData.add(obj1);
+        ItemShowObj obj2 = new ItemShowObj("无Bug","2016.11.27","无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#E91E63");
+        mData.add(obj2);
+        ItemShowObj obj3 = new ItemShowObj("无Bug","2016.11.27","无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#03A9F4");
+        mData.add(obj3);
+        ItemShowObj obj4 = new ItemShowObj("无Bug","2016.11.27","无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#FFEB3B");
+        mData.add(obj4);
+        ItemShowObj obj5 = new ItemShowObj("无Bug","2016.11.27","无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#FF5722");
+        mData.add(obj5);
+        ItemShowObj obj6 = new ItemShowObj("无Bug","2016.11.27","无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#00BCD4");
+        mData.add(obj6);
+        ItemShowObj obj7 = new ItemShowObj("无Bug","2016.11.27","无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#536DFE");
+        mData.add(obj7);
+        ItemShowObj obj8 = new ItemShowObj("无Bug","2016.11.27","无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#757575");
+        mData.add(obj8);
+        ItemShowObj obj9 = new ItemShowObj("无Bug","2016.11.27","无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#757575");
+        mData.add(obj9);
+        ItemShowObj obj10 = new ItemShowObj("无Bug","2016.11.27","无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#757575");
+        mData.add(obj10);
+        ItemShowObj obj11 = new ItemShowObj("无Bug","2016.11.27","无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#757575");
+        mData.add(obj11);
+
+    }
+
+
+
+
+
+
 }

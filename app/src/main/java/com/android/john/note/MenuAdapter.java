@@ -2,6 +2,7 @@ package com.android.john.note;
 
 /**
  * Created by John on 2016/11/22.
+ * It is adapter of drawer menu button list.
  */
 
         import android.content.Context;
@@ -14,10 +15,6 @@ package com.android.john.note;
         import android.widget.TextView;
         import com.android.john.note_01.R;
         import java.util.List;
-
-/**
- * Created by Administrator on 2016/5/14.
- */
 public class MenuAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<String> mData;

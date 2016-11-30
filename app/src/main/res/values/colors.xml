@@ -8,4 +8,5 @@
     <color name="colorBlack">#212121</color>
     <color name="colorGray">#757575</color>
     <color name="colorLight_gray">#bdbdbd</color>
+    <color name="RecyclerviewBG">#F7F8FA</color>
 </resources>
