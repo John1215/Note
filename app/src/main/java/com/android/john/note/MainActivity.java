@@ -18,6 +18,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -29,12 +30,7 @@ import android.widget.Toast;
 import com.android.john.note_01.R;
 import com.lzp.floatingactionbuttonplus.FabTagLayout;
 import com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus;
-import com.yanzhenjie.recyclerview.swipe.Closeable;
-import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
+
 
 
 import java.util.ArrayList;
@@ -64,12 +60,10 @@ public class MainActivity extends AppCompatActivity {
     private List<ItemShowObj> mData;
     private MainListAdapter recyclerAdapter;
     private FloatingActionButtonPlus fab;
-    private SwipeMenuRecyclerView swipeMenuRecyclerView;
     private Activity mContext;
-
-
     private RecyclerViewSwipe recyclerView;
     private LinearLayoutManager manager;
+    private ListAdapter adapter;
 
 
 
@@ -108,25 +102,24 @@ public class MainActivity extends AppCompatActivity {
         setTranslucentStatus(true);
         mContext=this;
         setContentView(R.layout.activity_main);
-        //工具栏
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        title=(TextView)findViewById(R.id.toolbar_title);
-        setSupportActionBar(toolbar);
-        //静态测试数据
         initData();
-        //圆形头像
-        icon=(CircleImageView)findViewById(R.id.circleImageView);
-        //icon.setImageDrawable(Drawable.createFromPath("/sdcard/01.jpg"));
-        //侧滑实现
-        drawerLayout=(DrawerLayout)findViewById(R.id.drawlayout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close
-        );
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        //侧滑栏按钮
-        drawer_btn_list = (ListView) findViewById(R.id.btn_list);
+        //静态测试数据
+        initData_Test();
+        initView();
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_search, menu);
+        MenuItem search=menu.findItem(R.id.menu_items_search);
+        SearchView searchView = (SearchView)search.getActionView();
+        mEditText=(SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
+        mEditText.setHint(R.string.search_hint);
+        return true;
+    }
+
+
+    private void initData() {
         choices = new ArrayList<String>();
         choiceIcon = new ArrayList<>();
         choices.add("同步");
@@ -139,7 +132,34 @@ public class MainActivity extends AppCompatActivity {
         choiceIcon.add(R.drawable.ic_drawer_setting);
         choiceIcon.add(R.drawable.ic_drawer_feedback);
         choiceIcon.add(R.drawable.ic_drawer_help);
-        ListAdapter adapter = new com.android.john.note.MenuAdapter(this,choices,choiceIcon);
+
+    }
+
+
+
+    private void initView(){
+        //工具栏
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        title=(TextView)findViewById(R.id.toolbar_title);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_navicon);
+
+        //圆形头像
+        icon=(CircleImageView)findViewById(R.id.circleImageView);
+        //icon.setImageDrawable(Drawable.createFromPath("/sdcard/01.jpg"));
+
+        //侧滑实现
+        drawerLayout=(DrawerLayout)findViewById(R.id.drawlayout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close
+        );
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        //侧滑栏按钮
+        drawer_btn_list = (ListView) findViewById(R.id.btn_list);
+
+        adapter = new com.android.john.note.MenuAdapter(this,choices,choiceIcon);
         drawer_btn_list.setAdapter(adapter);
         //下拉刷新实现
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefreshlayout);
@@ -161,15 +181,16 @@ public class MainActivity extends AppCompatActivity {
                 }).start();
             }
         });
-       //RecyclerView
+        //RecyclerView
         recyclerView=(RecyclerViewSwipe) findViewById(R.id.recycleview);
         manager = new LinearLayoutManager(getApplicationContext());
         recyclerAdapter = new MainListAdapter(mData,getApplicationContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(recyclerAdapter);
 
-        //浮动按钮
 
+
+        //浮动按钮
         fab=(FloatingActionButtonPlus)findViewById(R.id.FabPlus);
         fab.setPosition(FloatingActionButtonPlus.POS_RIGHT_BOTTOM);
         fab.setAnimation(FloatingActionButtonPlus.ANIM_SCALE);
@@ -185,18 +206,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_search, menu);
-        MenuItem search=menu.findItem(R.id.menu_items_search);
-        SearchView searchView = (SearchView)search.getActionView();
-        mEditText=(SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
-        mEditText.setHint(R.string.search_hint);
-        return true;
-    }
 
-//静态测试数据
-    private void initData() {
+
+    private void initData_Test(){
         mData = new ArrayList<ItemShowObj>();
         ItemShowObj obj1 = new ItemShowObj("无Bug无法尽快付款减肥搞飞纷纷就能付款呢机哥","2016.11.27","如果看人家搞看人家过年公开日公开认购公开日公开认购你个人看过基坑丰富和开发及客人就分开万积分空间访客积分你就能进风口九分裤客服即可放假无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#FBC02D");
         mData.add(obj1);
@@ -220,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
         mData.add(obj10);
         ItemShowObj obj11 = new ItemShowObj("无Bug","2016.11.27","无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug","#757575");
         mData.add(obj11);
+
 
     }
 

@@ -11,7 +11,7 @@
     <string name="search_hint">搜索</string>
     <string name="toolbar_save">保存</string>
     <string name="edit_title_hint">标题</string>
-    <string name="edit_content_hint">内容</string>
+    <string name="edit_content_hint">写点什么吧(￣▽￣)"</string>
     <string name="edit_color_hint">选择</string>
     <string name="swipe_del">删除</string>
 </resources>

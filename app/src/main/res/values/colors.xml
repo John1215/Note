@@ -9,4 +9,12 @@
     <color name="colorGray">#757575</color>
     <color name="colorLight_gray">#bdbdbd</color>
     <color name="RecyclerviewBG">#F7F8FA</color>
+    <color name="white_grey">#F0F0F0</color>
+    <color name="red">#FF5252</color>
+    <color name="cyan">#00BCD4</color>
+    <color name="blue">#03A9F4</color>
+    <color name="orange">#FF9800</color>
+    <color name="purple">#673AB7</color>
+    <color name="green">#4CAF50</color>
+
 </resources>

@@ -1,133 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_writing_main"
+    android:id="@+id/edit_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="5dp"
     tools:context="com.android.john.note.EditActivity">
-    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar2"
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:titleTextColor="@color/colorWhite"
-        android:elevation="2dp"
-        android:background="@color/colorPrimary"
-        app:navigationIcon="@drawable/ic_btn_slide_bar"
-        app:title="@string/toolbar_title"
-        app:titleTextColor="@color/colorWhite"
-        app:theme="@style/OverFlowMenuTheme"
-        >
+        android:layout_height="match_parent"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
         <TextView
+            android:id="@+id/edit_color"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_gravity="top"
+            android:background="@color/colorAccent"
+            android:elevation="2dp"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:id="@+id/edit_panel"
+            >
+            <EditText
+                android:id="@+id/edit_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:textSize="24sp"
+                android:textColor="@color/colorGray"
+                android:hint="@string/edit_title_hint"
+                android:layout_margin="2dp" />
+            <ImageView
+                android:id="@+id/edit_divider"
+               android:layout_width="360dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="1dp"
+                android:background="#E5E5E5"
+                android:layout_below="@id/edit_title"
+                />
+            <EditText
+                android:id="@+id/edit_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_below="@id/edit_divider"
+                android:textColor="@color/colorGray"
+                android:hint="@string/edit_content_hint"
+                android:textSize="20sp"
+                android:background="@color/colorWhite"
+                />
+        </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/btn_bar"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:background="@color/colorWhite"
+        >
+        <ImageButton
+            android:id="@+id/edit_color_choose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:text="@string/toolbar_title"
-            android:textColor="#ffffffff"
-            android:textSize="24dp"
-            android:textStyle="bold"
-
-            />
-    </android.support.v7.widget.Toolbar>
-<android.support.v7.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    android:layout_below="@id/toolbar2"
-    >
-    <TextView
-        android:id="@+id/edit_color"
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:layout_gravity="top"
-        android:background="@color/colorAccent"
-        android:elevation="1dp"
-        />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        >
-        <EditText
-            android:id="@+id/edit_title"
-            android:layout_width="match_parent"
+            android:src="@drawable/ic_edit_color"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:background="@null"/>
+        <ImageButton
+            android:layout_alignLeft="@id/edit_color_choose"
+            android:id="@+id/edit_pic_add"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            android:textSize="24sp"
-            android:textColor="@color/colorGray"
-            android:hint="@string/edit_title_hint"
-            android:layout_margin="10dp" />
-        <ImageView
-            android:id="@+id/edit_divider"
-           android:layout_width="360dp"
-            android:layout_centerHorizontal="true"
-            android:layout_height="1dp"
-            android:background="#E5E5E5"
-            android:layout_below="@id/edit_title"
-            />
-        <EditText
-            android:id="@+id/edit_content"
-            android:layout_width="match_parent"
+            android:src="@drawable/ic_edit_pic"
+            android:layout_marginLeft="60dp"
+            android:background="@null"/>
+        <ImageButton
+            android:layout_alignLeft="@id/edit_pic_add"
+            android:id="@+id/edit_handwriting"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/edit_divider"
-            android:textColor="@color/colorGray"
-            android:hint="@string/edit_content_hint"
-            android:textSize="18sp"
-            android:background="@color/colorWhite"
+            android:src="@drawable/ic_edit_handwriting"
+            android:layout_marginLeft="60dp"
+            android:background="@null"/>
+        <ImageButton
+            android:layout_alignLeft="@id/edit_handwriting"
+            android:id="@+id/edit_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit_scan"
+            android:layout_marginLeft="60dp"
+            android:background="@null"
+            />
+      <!--<Button-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:text="保存"-->
+          <!--android:background="@null"-->
+          <!--android:gravity="center"-->
+          <!--android:layout_gravity="center_horizontal|right"-->
+          <!--android:textSize="18sp"/>-->
+        <ImageButton
+            android:layout_alignParentRight="true"
+            android:id="@+id/edit_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit_scan"
+            android:layout_marginRight="30dp"
+            android:background="@null"
             />
     </RelativeLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="45dp"
-    android:orientation="horizontal"
-    android:layout_gravity="bottom"
-    >
-    <ImageButton
-        android:id="@+id/edit_color_choose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_edit_color"
-        android:layout_gravity="center"
-        android:layout_marginLeft="15dp"
-        android:background="@null"/>
-    <ImageButton
-        android:id="@+id/edit_pic_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_edit_pic"
-        android:layout_gravity="center"
-        android:layout_marginLeft="30dp"
-        android:background="@null"/>
-    <ImageButton
-        android:id="@+id/edit_handwriting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_edit_handwriting"
-        android:layout_gravity="center"
-        android:layout_marginLeft="30dp"
-        android:background="@null"/>
-    <ImageButton
-        android:id="@+id/edit_scan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_edit_scan"
-        android:layout_gravity="center"
-        android:layout_marginLeft="30dp"
-        android:background="@null"
-        />
-  <!--<Button-->
-      <!--android:layout_width="wrap_content"-->
-      <!--android:layout_height="wrap_content"-->
-      <!--android:text="保存"-->
-      <!--android:background="@null"-->
-      <!--android:gravity="center"-->
-      <!--android:layout_gravity="center_horizontal|right"-->
-      <!--android:textSize="18sp"/>-->
-</LinearLayout>
-</android.support.v7.widget.CardView>
+
+
+    </android.support.v7.widget.CardView>
+
 </RelativeLayout>
+

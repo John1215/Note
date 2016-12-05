@@ -2,8 +2,10 @@ package com.android.john.note;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.john.note_01.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +28,9 @@ import java.util.List;
 public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.MainListViewHolder> {
     public Context context;
     private List<ItemShowObj> mData;
+    private List<ItemShowObj> mUndo;
     private LayoutInflater inflater;
+    private boolean canClick=false;
 
     public MainListAdapter(List<ItemShowObj> data,Context context) {
         this.context = context;
@@ -60,7 +65,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.MainLi
 
     }
 
-    public class MainListViewHolder extends RecyclerView.ViewHolder {
+    public class MainListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView mTitle;
         public TextView mContent;
         public TextView mColor;
@@ -69,21 +74,48 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.MainLi
         public LinearLayout layout;
 
 
+
         public MainListViewHolder(View itemView) {
+
             super(itemView);
             mTitle = (TextView) itemView.findViewById(R.id.cardview_title);
             mContent = (TextView) itemView.findViewById(R.id.cardview_content);
             mColor = (TextView) itemView.findViewById(R.id.cardview_color);
             mTime = (TextView) itemView.findViewById(R.id.cardview_time);
             layout = (LinearLayout) itemView.findViewById(R.id.cardview_linear);
+            if(canClick){
+            itemView.setOnClickListener(this);}
+
+        }
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(context,mTitle.getText().toString(),Toast.LENGTH_SHORT).show();
         }
     }
 
     public void removeRecycle(int position) {
+        mUndo=new ArrayList<>();
+        mUndo.add(mData.get(position));
         mData.remove(position);
+
         notifyDataSetChanged();
         if (mData.size() == 0) {
             Toast.makeText(context, "已经没数据啦", Toast.LENGTH_SHORT).show();
         }
     }
+    public void Undo_removeRecycle(int position){
+        mData.add(position,mUndo.get(0));
+        notifyDataSetChanged();
+
+    }
+    public List<ItemShowObj>  returnData(){
+        return mData;
+    }
+    public void setItemClick(boolean flag){
+
+            canClick=flag;
+
+    }
+
 }
