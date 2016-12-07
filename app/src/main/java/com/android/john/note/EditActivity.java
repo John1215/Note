@@ -1,5 +1,6 @@
 package com.android.john.note;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -62,6 +63,11 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
 
     //用于计算手指滑动的速度。
     private VelocityTracker mVelocityTracker;
+
+    public static Intent newIntent(Context context){
+        Intent i = new Intent(context, EditActivity.class);
+        return i;
+    }
 
 
     @Override

@@ -43,7 +43,7 @@
         <com.android.john.note.RecyclerViewSwipe
             android:id="@+id/recycleview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></com.android.john.note.RecyclerViewSwipe>
+            android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
     <!--fab-->
     <com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus

@@ -32,7 +32,6 @@ import com.android.john.note_01.R;
 
 import static java.lang.Thread.sleep;
 
-
 public class RecyclerViewSwipe extends RecyclerView {
     private int maxLength;
     private int mStartX = 0;
@@ -47,6 +46,7 @@ public class RecyclerViewSwipe extends RecyclerView {
     private RecyclerViewSwipe recyclerViewSwipe;
     private CoordinatorLayout coordinatorLayout;
     private boolean flag=false;
+    private Context mContext;
 
     public RecyclerViewSwipe(Context context) {
         this(context, null);
@@ -65,6 +65,8 @@ public class RecyclerViewSwipe extends RecyclerView {
         maxLength = ((int) (180 * context.getResources().getDisplayMetrics().density + 0.5f));
         //初始化Scroller
         mScroller = new Scroller(context, new LinearInterpolator(context, null));
+
+        mContext = context;
     }
 
 
@@ -115,49 +117,49 @@ public class RecyclerViewSwipe extends RecyclerView {
                 int dy = yMove - yDown;
 
                 if(!MainActivity.DrawerIsOpen){
-                //判断点击 大于X,Y位移大于4像素进行滑动判断
-               if(Math.abs(dy)>4&&Math.abs(dx)>4){
-                   flag=false;
-                if (Math.abs(dy) < mTouchSlop * 2 && Math.abs(dx) > mTouchSlop) {
-                    int scrollX = itemLayout.getScrollX();
-                    int newScrollX = mStartX - x;
-                    if (newScrollX < 0 && scrollX <= 0) {
-                        newScrollX = 0;
-                    } else if (newScrollX > 0 && scrollX >= maxLength) {
-                        newScrollX = 0;
-                    }
-                    if (scrollX > maxLength / 2) {
+                    //判断点击 大于X,Y位移大于4像素进行滑动判断
+                    if(Math.abs(dy)>4&&Math.abs(dx)>4){
+                        flag=false;
+                        if (Math.abs(dy) < mTouchSlop * 2 && Math.abs(dx) > mTouchSlop) {
+                            int scrollX = itemLayout.getScrollX();
+                            int newScrollX = mStartX - x;
+                            if (newScrollX < 0 && scrollX <= 0) {
+                                newScrollX = 0;
+                            } else if (newScrollX > 0 && scrollX >= maxLength) {
+                                newScrollX = 0;
+                            }
+                            if (scrollX > maxLength / 2) {
 
-                        textView.setVisibility(View.GONE);
-                        imageView.setVisibility(View.VISIBLE);
+                                textView.setVisibility(View.GONE);
+                                imageView.setVisibility(View.VISIBLE);
 
 
-                        if (isFirst) {
-                            ObjectAnimator animatorX = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 1.2f, 1f);
-                            ObjectAnimator animatorY = ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 1.2f, 1f);
-                            AnimatorSet animSet = new AnimatorSet();
-                            animSet.play(animatorX).with(animatorY);
-                            animSet.setDuration(800);
-                            animSet.start();
-                            isFirst = false;
+                                if (isFirst) {
+                                    ObjectAnimator animatorX = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 1.2f, 1f);
+                                    ObjectAnimator animatorY = ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 1.2f, 1f);
+                                    AnimatorSet animSet = new AnimatorSet();
+                                    animSet.play(animatorX).with(animatorY);
+                                    animSet.setDuration(800);
+                                    animSet.start();
+                                    isFirst = false;
+                                }
+
+
+                            } else {
+                                textView.setVisibility(View.VISIBLE);
+                                imageView.setVisibility(View.GONE);
+
+
+                            }
+                            itemLayout.scrollBy(newScrollX, 0);
                         }
 
-
-                    } else {
-                        textView.setVisibility(View.VISIBLE);
-                        imageView.setVisibility(View.GONE);
-
-
                     }
-                    itemLayout.scrollBy(newScrollX, 0);
-                }
+                    //位移小于4像素，为点击
+                    else {
 
-                }
-               //位移小于4像素，为点击
-               else {
-
-                   flag=true;
-               }}
+                        flag=true;
+                    }}
             }
             break;
             case MotionEvent.ACTION_UP: {
@@ -167,12 +169,15 @@ public class RecyclerViewSwipe extends RecyclerView {
                     Log.v("test",((MainListAdapter) getAdapter()).returnData().get(pos).getTitle().toString());
                     Toast.makeText(getContext(),((MainListAdapter) getAdapter()).returnData().get(pos).getTitle().toString(),Toast.LENGTH_SHORT).show();
                     //启动Activity
+//                    startEditActivity();
+                    Intent i = new Intent(mContext, EditActivity.class);
+                    mContext.startActivity(i);
                 }
                 //响应滑动判断
                 int scrollX = itemLayout.getScrollX();
                 if (scrollX > maxLength / 2) {
                     ((MainListAdapter) getAdapter()).removeRecycle(pos);
-                recyclerViewSwipe=(RecyclerViewSwipe) findViewById(R.id.recycleview);
+                    recyclerViewSwipe=(RecyclerViewSwipe) findViewById(R.id.recycleview);
                     Snackbar.make(recyclerViewSwipe, "已删除", Snackbar.LENGTH_SHORT)
                             .setAction("撤销", new RecyclerViewSwipe.OnClickListener() {
                                 @Override
@@ -204,4 +209,6 @@ public class RecyclerViewSwipe extends RecyclerView {
             invalidate();
         }
     }
+
 }
+
