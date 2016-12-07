@@ -6,6 +6,7 @@ package com.android.john.note;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -27,6 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.john.note_01.R;
+
+
+import static java.lang.Thread.sleep;
 
 
 public class RecyclerViewSwipe extends RecyclerView {
@@ -109,6 +113,8 @@ public class RecyclerViewSwipe extends RecyclerView {
                 yMove = y;
                 int dx = xMove - xDown;
                 int dy = yMove - yDown;
+
+                if(!MainActivity.DrawerIsOpen){
                 //判断点击 大于X,Y位移大于4像素进行滑动判断
                if(Math.abs(dy)>4&&Math.abs(dx)>4){
                    flag=false;
@@ -151,7 +157,7 @@ public class RecyclerViewSwipe extends RecyclerView {
                else {
 
                    flag=true;
-               }
+               }}
             }
             break;
             case MotionEvent.ACTION_UP: {
@@ -160,6 +166,7 @@ public class RecyclerViewSwipe extends RecyclerView {
 
                     Log.v("test",((MainListAdapter) getAdapter()).returnData().get(pos).getTitle().toString());
                     Toast.makeText(getContext(),((MainListAdapter) getAdapter()).returnData().get(pos).getTitle().toString(),Toast.LENGTH_SHORT).show();
+                    //启动Activity
                 }
                 //响应滑动判断
                 int scrollX = itemLayout.getScrollX();

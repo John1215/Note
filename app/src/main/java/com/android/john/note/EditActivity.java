@@ -46,6 +46,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
     private MaterialDialog ColorChoosePanel;
     private TextView color_tag;
     private RelativeLayout relativeLayout;
+    private TextView time;
 
     //手指向右滑动时的最小速度
     private static final int XSPEED_MIN = 200;
@@ -116,6 +117,8 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
                 ColorChoosePanel.show();
             }
         });
+        time=(TextView)findViewById(R.id.edit_time);
+        time.setText("修改时间：2016年12月7日");
 
     }
 
@@ -180,12 +183,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         return true;
     }
 
-    /**
-     * 创建VelocityTracker对象，并将触摸content界面的滑动事件加入到VelocityTracker当中。
-     *
-     * @param event
-     *
-     */
+    //创建VelocityTracker对象，并将触摸content界面的滑动事件加入到VelocityTracker当中。
     private void createVelocityTracker(MotionEvent event) {
         if (mVelocityTracker == null) {
             mVelocityTracker = VelocityTracker.obtain();
@@ -193,9 +191,8 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         mVelocityTracker.addMovement(event);
     }
 
-    /**
-     * 回收VelocityTracker对象。
-     */
+   // 回收VelocityTracker对象。
+
     private void recycleVelocityTracker() {
         mVelocityTracker.recycle();
         mVelocityTracker = null;

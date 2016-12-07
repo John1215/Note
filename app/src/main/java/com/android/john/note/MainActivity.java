@@ -16,6 +16,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,7 +40,7 @@ import java.util.Collections;
 import java.util.List;
 
 import circleimageview.CircleImageView;
-
+import me.drakeet.materialdialog.MaterialDialog;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -64,6 +66,15 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerViewSwipe recyclerView;
     private LinearLayoutManager manager;
     private ListAdapter adapter;
+    private TextView drawer_login_btn;
+    private TextView login_btn;
+    private TextView cancel_btn;
+    public static boolean DrawerIsOpen=false;
+    private MaterialDialog login_panel;
+    private EditText login_username;
+    private EditText login_password;
+    private String name;
+    private String psd;
 
 
 
@@ -154,7 +165,23 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close
-        );
+        ){
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                DrawerIsOpen=true;
+//                Toast.makeText(getApplicationContext(),"false",Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                DrawerIsOpen=false;
+//                Toast.makeText(getApplicationContext(),"true",Toast.LENGTH_SHORT).show();
+
+            }
+
+
+        };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         //侧滑栏按钮
         drawer_btn_list = (ListView) findViewById(R.id.btn_list);
@@ -205,6 +232,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        login_panel=new MaterialDialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.login_popup_window,null);
+        login_panel.setView(view);
+        drawer_login_btn=(TextView)findViewById(R.id.login);
+        drawer_login_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                login_panel.show();
+            }
+        });
+        login_btn=(TextView)findViewById(R.id.login_ok);
+        cancel_btn=(TextView)findViewById(R.id.login_cancel);
+        login_username=(EditText)findViewById(R.id.username);
+        login_password=(EditText)findViewById(R.id.password);
+
+
+
+
     }
 
 
@@ -234,6 +280,20 @@ public class MainActivity extends AppCompatActivity {
         mData.add(obj11);
 
 
+    }
+    //弹出登录窗两个按钮的执行函数
+    public void login(View view){
+//        name=login_username.getText().toString();
+//        psd=login_password.getText().toString();
+//        if(psd==null) Log.v("psd","null");
+//        else
+        Toast.makeText(getApplicationContext(),"登录",Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getApplicationContext(),login_password.getText().toString(),Toast.LENGTH_SHORT).show();
+
+    }
+    public void cancel(View view){
+
+        login_panel.dismiss();
     }
 
 

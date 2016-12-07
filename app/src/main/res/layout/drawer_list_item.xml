@@ -6,8 +6,8 @@
     >
     <ImageView
         android:id="@+id/action_icon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@mipmap/ic_launcher"
         android:layout_margin="15dp"/>
     <TextView
@@ -17,6 +17,6 @@
         android:text="选项"
         android:textSize="15sp"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="15dp"/>
+        android:layout_marginLeft="25dp"/>
 
 </LinearLayout>

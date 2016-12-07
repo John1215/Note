@@ -58,25 +58,44 @@
                 android:textSize="20sp"
                 android:background="@color/colorWhite"
                 />
+
         </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/btn_bar"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:orientation="horizontal"
+        android:layout_height="60dp"
         android:layout_gravity="bottom"
         android:layout_marginBottom="10dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:background="@color/colorWhite"
         >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:background="@color/colorWhite"
+            android:layout_marginBottom="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/colorLight_gray"
+                android:id="@+id/edit_time"/>
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
         <ImageButton
             android:id="@+id/edit_color_choose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edit_color"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="12dp"
             android:background="@null"/>
         <ImageButton
             android:layout_alignLeft="@id/edit_color_choose"
@@ -84,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edit_pic"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="55dp"
             android:background="@null"/>
         <ImageButton
             android:layout_alignLeft="@id/edit_pic_add"
@@ -92,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edit_handwriting"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="55dp"
             android:background="@null"/>
         <ImageButton
             android:layout_alignLeft="@id/edit_handwriting"
@@ -100,26 +119,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edit_scan"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="55dp"
             android:background="@null"
             />
-      <!--<Button-->
-          <!--android:layout_width="wrap_content"-->
-          <!--android:layout_height="wrap_content"-->
-          <!--android:text="保存"-->
-          <!--android:background="@null"-->
-          <!--android:gravity="center"-->
-          <!--android:layout_gravity="center_horizontal|right"-->
-          <!--android:textSize="18sp"/>-->
         <ImageButton
-            android:layout_alignParentRight="true"
-            android:id="@+id/edit_share"
+            android:layout_alignLeft="@id/edit_scan"
+            android:id="@+id/edit_team"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit_scan"
-            android:layout_marginRight="30dp"
+            android:src="@drawable/ic_edit_team"
+            android:layout_marginLeft="55dp"
             android:background="@null"
             />
+
+        <ImageButton
+            android:layout_alignParentRight="true"
+            android:id="@+id/edit_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit_save"
+            android:layout_marginRight="15dp"
+            android:background="@null"
+            />
+        </RelativeLayout>
     </RelativeLayout>
 
 
