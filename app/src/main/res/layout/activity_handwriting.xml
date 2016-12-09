@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_handwriting"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.android.john.note.HandwritingActivity">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+        <com.android.john.note.HandwritingView
+            android:id="@+id/hand_drawing_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_gravity="bottom">
+
+
+            <ImageButton
+                android:id="@+id/handwriting_pen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="12dp"
+                android:background="@null"
+                android:src="@drawable/ic_handwriting_pen"/>
+
+            <ImageButton
+                android:id="@+id/handwriting_rubber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/handwriting_pen"
+                android:layout_marginLeft="55dp"
+                android:background="@null"
+                android:src="@drawable/ic_handwriting_rubber"
+                />
+
+            <ImageButton
+                android:id="@+id/handwriting_undo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/handwriting_rubber"
+                android:layout_marginLeft="55dp"
+                android:background="@null"
+                android:src="@drawable/ic_handwriting_undo"/>
+
+            <ImageButton
+                android:id="@+id/handwriting_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/handwriting_undo"
+                android:layout_marginLeft="55dp"
+                android:background="@null"
+                android:src="@drawable/ic_handwriting_clear"/>
+
+            <ImageButton
+                android:id="@+id/handwriting_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="12dp"
+                android:background="@null"
+                android:src="@drawable/ic_edit_save"/>
+
+
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/edit_team"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignLeft="@id/edit_scan"-->
+                <!--android:layout_marginLeft="55dp"-->
+                <!--android:background="@null"-->
+                <!--android:src="@drawable/ic_edit_team"-->
+                <!--/>-->
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/edit_save"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginRight="15dp"-->
+                <!--android:background="@null"-->
+                <!--android:src="@drawable/ic_edit_save"-->
+                <!--/>-->
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
