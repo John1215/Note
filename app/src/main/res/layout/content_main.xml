@@ -46,60 +46,69 @@
             android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
     <!--fab-->
-    <com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus
-        android:id="@+id/FabPlus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:switchFabColor="@color/colorAccent"
-        app:switchFabIcon="@drawable/ic_fab_add"
-        app:layout_behavior="com.lzp.floatingactionbuttonplus.FabBehavior"
-        app:mBackgroundColor="#98ffffff"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_gravity="bottom|right"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@color/colorAccent"
+        android:layout_margin="15dp"
+        android:src="@drawable/ic_fab_add"
+        />
+    <!--<com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus-->
+        <!--android:id="@+id/FabPlus"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:switchFabColor="@color/colorAccent"-->
+        <!--app:switchFabIcon="@drawable/ic_fab_add"-->
+        <!--app:layout_behavior="com.lzp.floatingactionbuttonplus.FabBehavior"-->
+        <!--app:mBackgroundColor="#98ffffff"-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto">-->
 
-        <com.lzp.floatingactionbuttonplus.FabTagLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:tagText="@string/fab_item_title_note"
-            >
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_fab_item_note"
-                app:backgroundTint="@color/colorWhite"
-                app:fabSize="mini" />
-        </com.lzp.floatingactionbuttonplus.FabTagLayout>
+        <!--&lt;!&ndash;<com.lzp.floatingactionbuttonplus.FabTagLayout&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;app:tagText="@string/fab_item_title_note"&ndash;&gt;-->
+            <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;<android.support.design.widget.FloatingActionButton&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:src="@drawable/ic_fab_item_note"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:backgroundTint="@color/colorWhite"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:fabSize="mini" />&ndash;&gt;-->
+        <!--&lt;!&ndash;</com.lzp.floatingactionbuttonplus.FabTagLayout>&ndash;&gt;-->
 
-        <com.lzp.floatingactionbuttonplus.FabTagLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:tagText="@string/fab_item_title_note"
-            >
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_fab_item_camera"
-                app:backgroundTint="@color/colorWhite"
-                app:fabSize="mini" />
-        </com.lzp.floatingactionbuttonplus.FabTagLayout>
+        <!--&lt;!&ndash;<com.lzp.floatingactionbuttonplus.FabTagLayout&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;app:tagText="@string/fab_item_title_camera"&ndash;&gt;-->
+            <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;<android.support.design.widget.FloatingActionButton&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:src="@drawable/ic_fab_item_camera"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:backgroundTint="@color/colorWhite"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:fabSize="mini" />&ndash;&gt;-->
+        <!--&lt;!&ndash;</com.lzp.floatingactionbuttonplus.FabTagLayout>&ndash;&gt;-->
 
-        <com.lzp.floatingactionbuttonplus.FabTagLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:tagText="@string/fab_item_title_handwriting"
-            >
+        <!--&lt;!&ndash;<com.lzp.floatingactionbuttonplus.FabTagLayout&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;app:tagText="@string/fab_item_title_handwriting"&ndash;&gt;-->
+            <!--&lt;!&ndash;&gt;&ndash;&gt;-->
 
-            <android.support.design.widget.FloatingActionButton
-                android:layout_marginTop="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_fab_item_handwriting"
-                app:backgroundTint="@color/colorWhite"
-                app:fabSize="mini" />
-        </com.lzp.floatingactionbuttonplus.FabTagLayout>
+            <!--&lt;!&ndash;<android.support.design.widget.FloatingActionButton&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginTop="15dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:src="@drawable/ic_fab_item_handwriting"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:backgroundTint="@color/colorWhite"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:fabSize="mini" />&ndash;&gt;-->
+        <!--&lt;!&ndash;</com.lzp.floatingactionbuttonplus.FabTagLayout>&ndash;&gt;-->
 
 
-    </com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus>
+    <!--</com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus>-->
     <!--<TextView-->
         <!--android:id="@+id/bottom_text"-->
         <!--android:layout_width="match_parent"-->

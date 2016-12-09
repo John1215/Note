@@ -3,6 +3,7 @@ package com.android.john.note;
 /**
  * Created by John on 2016/11/30.
  */
+
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -30,6 +31,8 @@ import android.widget.Toast;
 import com.android.john.note_01.R;
 
 
+import java.util.UUID;
+
 import static java.lang.Thread.sleep;
 
 public class RecyclerViewSwipe extends RecyclerView {
@@ -44,9 +47,10 @@ public class RecyclerViewSwipe extends RecyclerView {
     private ImageView imageView;
     private boolean isFirst = true;
     private RecyclerViewSwipe recyclerViewSwipe;
-    private CoordinatorLayout coordinatorLayout;
-    private boolean flag=false;
+    private FloatingActionButton fab;
+    private boolean flag = false;
     private Context mContext;
+    private boolean isValid = true;
 
     public RecyclerViewSwipe(Context context) {
         this(context, null);
@@ -103,103 +107,121 @@ public class RecyclerViewSwipe extends RecyclerView {
                 }
                 //通过position得到item的viewHolder
                 View view = getChildAt(pos - mFirstPosition);
-                MainListAdapter.MainListViewHolder viewHolder = (MainListAdapter.MainListViewHolder) getChildViewHolder(view);
-                itemLayout = viewHolder.layout;
-                textView = (TextView) itemLayout.findViewById(R.id.item_delete_txt);
-                imageView = (ImageView) itemLayout.findViewById(R.id.item_delete_img);
+                if (view != null) {
+//                    Toast.makeText(mContext, "not null!", Toast.LENGTH_SHORT).show();
+                    isValid = true;
+                    MainListAdapter.MainListViewHolder viewHolder = (MainListAdapter.MainListViewHolder) getChildViewHolder(view);
+                    itemLayout = viewHolder.layout;
+                    textView = (TextView) itemLayout.findViewById(R.id.item_delete_txt);
+                    imageView = (ImageView) itemLayout.findViewById(R.id.item_delete_img);
+                }else{
+//                    Toast.makeText(mContext, "null!", Toast.LENGTH_SHORT).show();
+                    isValid = false;
+                }
+
+//                MainListAdapter.MainListViewHolder viewHolder = (MainListAdapter.MainListViewHolder) getChildViewHolder(view);
+//                itemLayout = viewHolder.layout;
+//                textView = (TextView) itemLayout.findViewById(R.id.item_delete_txt);
+//                imageView = (ImageView) itemLayout.findViewById(R.id.item_delete_img);
             }
             break;
 
             case MotionEvent.ACTION_MOVE: {
-                xMove = x;
-                yMove = y;
-                int dx = xMove - xDown;
-                int dy = yMove - yDown;
 
-                if(!MainActivity.DrawerIsOpen){
-                    //判断点击 大于X,Y位移大于4像素进行滑动判断
-                    if(Math.abs(dy)>4&&Math.abs(dx)>4){
-                        flag=false;
-                        if (Math.abs(dy) < mTouchSlop * 2 && Math.abs(dx) > mTouchSlop) {
-                            int scrollX = itemLayout.getScrollX();
-                            int newScrollX = mStartX - x;
-                            if (newScrollX < 0 && scrollX <= 0) {
-                                newScrollX = 0;
-                            } else if (newScrollX > 0 && scrollX >= maxLength) {
-                                newScrollX = 0;
-                            }
-                            if (scrollX > maxLength / 2) {
-
-                                textView.setVisibility(View.GONE);
-                                imageView.setVisibility(View.VISIBLE);
+                if (isValid) {
 
 
-                                if (isFirst) {
-                                    ObjectAnimator animatorX = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 1.2f, 1f);
-                                    ObjectAnimator animatorY = ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 1.2f, 1f);
-                                    AnimatorSet animSet = new AnimatorSet();
-                                    animSet.play(animatorX).with(animatorY);
-                                    animSet.setDuration(800);
-                                    animSet.start();
-                                    isFirst = false;
+                    xMove = x;
+                    yMove = y;
+                    int dx = xMove - xDown;
+                    int dy = yMove - yDown;
+
+                    if (!MainActivity.DrawerIsOpen) {
+                        //判断点击 大于X,Y位移大于4像素进行滑动判断
+                        if (Math.abs(dy) > 4 && Math.abs(dx) > 4) {
+                            flag = false;
+                            if (Math.abs(dy) < mTouchSlop * 2 && Math.abs(dx) > mTouchSlop) {
+                                int scrollX = itemLayout.getScrollX();
+                                int newScrollX = mStartX - x;
+                                if (newScrollX < 0 && scrollX <= 0) {
+                                    newScrollX = 0;
+                                } else if (newScrollX > 0 && scrollX >= maxLength) {
+                                    newScrollX = 0;
                                 }
+                                if (scrollX > maxLength / 2) {
+
+                                    textView.setVisibility(View.GONE);
+                                    imageView.setVisibility(View.VISIBLE);
 
 
-                            } else {
-                                textView.setVisibility(View.VISIBLE);
-                                imageView.setVisibility(View.GONE);
+                                    if (isFirst) {
+                                        ObjectAnimator animatorX = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 1.2f, 1f);
+                                        ObjectAnimator animatorY = ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 1.2f, 1f);
+                                        AnimatorSet animSet = new AnimatorSet();
+                                        animSet.play(animatorX).with(animatorY);
+                                        animSet.setDuration(800);
+                                        animSet.start();
+                                        isFirst = false;
+                                    }
 
 
+                                } else {
+                                    textView.setVisibility(View.VISIBLE);
+                                    imageView.setVisibility(View.GONE);
+
+
+                                }
+                                itemLayout.scrollBy(newScrollX, 0);
                             }
-                            itemLayout.scrollBy(newScrollX, 0);
+
                         }
+                        //位移小于4像素，为点击
+                        else {
 
+                            flag = true;
+                        }
                     }
-                    //位移小于4像素，为点击
-                    else {
-
-                        flag=true;
-                    }}
+                }
             }
             break;
             case MotionEvent.ACTION_UP: {
-                //响应点击操作
-                if(flag){
+                if (isValid) {
+                    //响应点击操作
+                    if (flag) {
+                        UUID id = ((MainListAdapter) getAdapter()).returnData().get(pos).getId();
+                        Intent i = EditActivity.newIntent(getContext());
+                        i.putExtra("UUID", id);
+                        mContext.startActivity(i);
+                    }
+                    //响应滑动判断
+                    int scrollX = itemLayout.getScrollX();
+                    if (scrollX > maxLength / 2) {
+                        ((MainListAdapter) getAdapter()).removeRecycle(pos);
+                        recyclerViewSwipe = (RecyclerViewSwipe) findViewById(R.id.recycleview);
+                        fab=(FloatingActionButton)findViewById(R.id.fab);
+                        Snackbar.make(recyclerViewSwipe, "已删除", Snackbar.LENGTH_SHORT)
+                                .setAction("撤销", new RecyclerViewSwipe.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ((MainListAdapter) getAdapter()).Undo_removeRecycle(pos);
+                                    }
+                                })
+                                .setActionTextColor(getResources().getColor(R.color.colorAccent))
+                                .setDuration(2500).show();
+                    } else {
+                        mScroller.startScroll(scrollX, 0, -scrollX, 0);
+                        //刷新view
+                        invalidate();
 
-                    Log.v("test",((MainListAdapter) getAdapter()).returnData().get(pos).getTitle().toString());
-                    Toast.makeText(getContext(),((MainListAdapter) getAdapter()).returnData().get(pos).getTitle().toString(),Toast.LENGTH_SHORT).show();
-                    //启动Activity
-//                    startEditActivity();
-                    Intent i = new Intent(mContext, EditActivity.class);
-                    mContext.startActivity(i);
+                    }
+                    isFirst = true;
                 }
-                //响应滑动判断
-                int scrollX = itemLayout.getScrollX();
-                if (scrollX > maxLength / 2) {
-                    ((MainListAdapter) getAdapter()).removeRecycle(pos);
-                    recyclerViewSwipe=(RecyclerViewSwipe) findViewById(R.id.recycleview);
-                    Snackbar.make(recyclerViewSwipe, "已删除", Snackbar.LENGTH_SHORT)
-                            .setAction("撤销", new RecyclerViewSwipe.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    ((MainListAdapter) getAdapter()).Undo_removeRecycle(pos);
-                                }
-                            })
-                            .setActionTextColor(getResources().getColor(R.color.colorAccent))
-                            .setDuration(1500).show();
-                } else {
-                    mScroller.startScroll(scrollX, 0, -scrollX, 0);
-                    //刷新view
-                    invalidate();
-
-                }
-                isFirst = true;
             }
             break;
 
         }
         mStartX = x;
-        ((MainListAdapter)getAdapter()).setItemClick(false);
+        ((MainListAdapter) getAdapter()).setItemClick(false);
         return super.onTouchEvent(event);
     }
 

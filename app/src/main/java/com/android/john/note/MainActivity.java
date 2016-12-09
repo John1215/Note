@@ -4,46 +4,30 @@ created by john
 
  */
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,11 +36,10 @@ import com.lzp.floatingactionbuttonplus.FabTagLayout;
 import com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus;
 
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import circleimageview.CircleImageView;
 import me.drakeet.materialdialog.MaterialDialog;
@@ -78,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
     private List<String> choices;
     private List<Integer> choiceIcon;
     private ListView listView;
-    private List<ItemShowObj> mData;
+    private List<NoteItem> mNoteItems;
     private MainListAdapter recyclerAdapter;
-    private FloatingActionButtonPlus fab;
+    private FloatingActionButton fab;
     private Activity mContext;
     private RecyclerViewSwipe recyclerView;
     private LinearLayoutManager manager;
@@ -115,8 +98,9 @@ public class MainActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
+                    Toast.makeText(MainActivity.this, "顾隽逸是我儿子", Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.setRefreshing(false);
-                    recyclerAdapter.notifyDataSetChanged();
+//                    recyclerAdapter.notifyDataSetChanged();
                     break;
                 default:
                     break;
@@ -132,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
         initData();
         //静态测试数据
-        initData_Test();
+//        initData_Test();
         initView();
 
     }
@@ -215,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Collections.reverse(mData);
                         try {
                             Thread.sleep(1000); //模拟耗时,测试
                         } catch (InterruptedException e) {
@@ -229,25 +212,59 @@ public class MainActivity extends AppCompatActivity {
         //RecyclerView
         recyclerView = (RecyclerViewSwipe) findViewById(R.id.recycleview);
         manager = new LinearLayoutManager(getApplicationContext());
-        recyclerAdapter = new MainListAdapter(mData, getApplicationContext());
         recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(recyclerAdapter);
 
+//        recyclerAdapter = new MainListAdapter(NoteLab.get(getApplicationContext()).getNoteItems(), getApplicationContext());
+//        recyclerView.setAdapter(recyclerAdapter);
+        updateUI();
 
         //浮动按钮
-        fab = (FloatingActionButtonPlus) findViewById(R.id.FabPlus);
-        fab.setPosition(FloatingActionButtonPlus.POS_RIGHT_BOTTOM);
-        fab.setAnimation(FloatingActionButtonPlus.ANIM_SCALE);
-        fab.setAnimationDuration(150);
-        fab.setOnItemClickListener(new FloatingActionButtonPlus.OnItemClickListener() {
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+       // fab.setPosition(FloatingActionButtonPlus.POS_RIGHT_BOTTOM);
+       // fab.setAnimation(FloatingActionButton.ANIM_SCALE);
+     //   fab.setAnimationDuration(150);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(FabTagLayout tagView, int position) {
-                Toast.makeText(MainActivity.this, "Click btn" + position, Toast.LENGTH_SHORT).show();
-                if (position == 1) {
-                    Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_SHORT).show();
-                }
+            public void onClick(View v) {
+                NoteItem item = new NoteItem();
+                NoteLab.get(getApplicationContext()).addNoteItem(item);
+                Intent i = EditActivity.newIntent(getApplicationContext());
+                i.putExtra("UUID", item.getId());
+//                    i.putExtra("tag", "note");
+                mContext.startActivity(i);
             }
         });
+//        fab.setVisibility(View.VISIBLE);
+//        fab.setOnItemClickListener(new FloatingActionButtonPlus.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(FabTagLayout tagView, int position) {
+//                Toast.makeText(MainActivity.this, "Click btn" + position, Toast.LENGTH_SHORT).show();
+//                if (position == 0) {
+//                    //new note
+//                    NoteItem item = new NoteItem();
+//                    NoteLab.get(getApplicationContext()).addNoteItem(item);
+//                    Intent i = EditActivity.newIntent(getApplicationContext());
+//                    i.putExtra("UUID", item.getId());
+////                    i.putExtra("tag", "note");
+//                    mContext.startActivity(i);
+//                }
+//                  else if(position == 1){
+//                    NoteItem item = new NoteItem();
+//                    NoteLab.get(getApplicationContext()).addNoteItem(item);
+//                    Intent i = EditActivity.newIntent(getApplicationContext());
+//                    i.putExtra("UUID", item.getId());
+//                    i.putExtra("tag", "photo");
+//                    mContext.startActivity(i);
+//                }else{
+//                    NoteItem item = new NoteItem();
+//                    NoteLab.get(getApplicationContext()).addNoteItem(item);
+//                    Intent i = EditActivity.newIntent(getApplicationContext());
+//                    i.putExtra("UUID", item.getId());
+//                    i.putExtra("tag", "handwriting");
+//                    mContext.startActivity(i);
+//                }
+//            }
+//        });
 
 
         login_panel = new MaterialDialog(this);
@@ -314,39 +331,27 @@ public class MainActivity extends AppCompatActivity {
         });
         login_btn = (TextView) findViewById(R.id.login_ok);
         cancel_btn = (TextView) findViewById(R.id.login_cancel);
-//        login_username = (EditText) findViewById(R.id.username);
-//        login_password = (EditText) findViewById(R.id.password);
-
-
     }
 
 
-    private void initData_Test() {
-        mData = new ArrayList<ItemShowObj>();
-        ItemShowObj obj1 = new ItemShowObj("无Bug无法尽快付款减肥搞飞纷纷就能付款呢机哥", "2016.11.27", "如果看人家搞看人家过年公开日公开认购公开日公开认购你个人看过基坑丰富和开发及客人就分开万积分空间访客积分你就能进风口九分裤客服即可放假无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug", "#FBC02D");
-        mData.add(obj1);
-        ItemShowObj obj2 = new ItemShowObj("无Bug", "2016.11.27", "无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug", "#E91E63");
-        mData.add(obj2);
-        ItemShowObj obj3 = new ItemShowObj("无Bug", "2016.11.27", "无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug", "#03A9F4");
-        mData.add(obj3);
-        ItemShowObj obj4 = new ItemShowObj("无Bug", "2016.11.27", "无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug", "#FFEB3B");
-        mData.add(obj4);
-        ItemShowObj obj5 = new ItemShowObj("无Bug", "2016.11.27", "无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug", "#FF5722");
-        mData.add(obj5);
-        ItemShowObj obj6 = new ItemShowObj("无Bug", "2016.11.27", "无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug", "#00BCD4");
-        mData.add(obj6);
-        ItemShowObj obj7 = new ItemShowObj("无Bug", "2016.11.27", "无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug", "#536DFE");
-        mData.add(obj7);
-        ItemShowObj obj8 = new ItemShowObj("无Bug", "2016.11.27", "无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug", "#757575");
-        mData.add(obj8);
-        ItemShowObj obj9 = new ItemShowObj("无Bug", "2016.11.27", "无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug", "#757575");
-        mData.add(obj9);
-        ItemShowObj obj10 = new ItemShowObj("无Bug", "2016.11.27", "无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug", "#757575");
-        mData.add(obj10);
-        ItemShowObj obj11 = new ItemShowObj("无Bug", "2016.11.27", "无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug无Bug", "#757575");
-        mData.add(obj11);
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        updateUI();
     }
 
+    private void updateUI() {
+        NoteLab lab = NoteLab.get(getApplicationContext());
+        List<NoteItem> items = lab.getNoteItems();
+
+        if (recyclerAdapter == null) {
+            recyclerAdapter = new MainListAdapter(items, getApplicationContext());
+            recyclerView.setAdapter(recyclerAdapter);
+        } else {
+            recyclerAdapter.setNoteItems(items);
+            recyclerAdapter.notifyDataSetChanged();
+        }
+    }
 }
 
