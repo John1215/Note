@@ -14,9 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:elevation="2dp"
         android:paddingTop="20dp"
         android:titleTextColor="@color/colorWhite"
+        android:elevation="1dp"
         app:navigationIcon="@drawable/ic_btn_slide_bar"
         app:theme="@style/OverFlowMenuTheme"
         app:title="@string/toolbar_title"
@@ -46,7 +46,8 @@
         <com.android.john.note.RecyclerViewSwipe
             android:id="@+id/recycleview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@null"/>
     </android.support.v4.widget.SwipeRefreshLayout>
     <!--fab-->
     <android.support.design.widget.FloatingActionButton

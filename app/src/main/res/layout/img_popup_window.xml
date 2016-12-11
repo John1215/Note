@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
+              android:layout_width="80dp"
+              android:layout_height="match_parent"
+              android:layout_centerHorizontal="true"
+              android:layout_centerVertical="true"
+    android:paddingTop="15dp"
+    >
     <Button
         android:id="@+id/camera_button"
+        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="拍照"/>
-
+        android:text="拍照"
+        android:textSize="20sp"
+        android:background="@null"
+        android:layout_margin="5dp"/>
+    <ImageView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_below="@id/camera_button"
+        android:layout_height="1dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:padding="5dp"
+        android:background="@color/gainsboro" />
     <Button
+        android:layout_centerHorizontal="true"
         android:id="@+id/gallery_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="相册"/>
+        android:text="相册"
+        android:textSize="20sp"
+        android:layout_below="@id/line"
+        android:background="@null"
+        android:layout_margin="5dp"/>
 
-</LinearLayout>
+</RelativeLayout>

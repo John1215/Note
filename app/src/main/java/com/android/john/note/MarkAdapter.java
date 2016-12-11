@@ -17,12 +17,12 @@ import com.android.john.note.R;
 
 import java.util.List;
 
-public class MenuAdapter extends BaseAdapter {
+public class MarkAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<String> mData;
     private List<Integer> mDataIcon;
 
-    public MenuAdapter(Context context, List<String> data, List<Integer> dataicon) {
+    public MarkAdapter(Context context, List<String> data, List<Integer> dataicon) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.mDataIcon = dataicon;
@@ -45,9 +45,9 @@ public class MenuAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = mInflater.inflate(R.layout.drawer_list_btn, null);
-        TextView textView = (TextView) view.findViewById(R.id.choice);
-        ImageView imageView = (ImageView) view.findViewById(R.id.action_icon);
+        View view = mInflater.inflate(R.layout.drawer_list_mark, null);
+        TextView textView = (TextView) view.findViewById(R.id.mark_tag);
+        ImageView imageView = (ImageView) view.findViewById(R.id.mark_icon);
         imageView.setImageResource(mDataIcon.get(position));
         textView.setText(mData.get(position));
         return view;

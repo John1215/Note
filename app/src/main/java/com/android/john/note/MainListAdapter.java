@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.support.v4.media.session.IMediaControllerCallback;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -16,9 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.android.john.note_01.R;
 
-import com.android.john.note_01.R;
+
+import com.android.john.note.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,8 +101,9 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.MainLi
     public class MainListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mTitle;
         public TextView mContent;
-        public TextView mColor;
+        public ImageView mColor;
         public TextView mDate;
+        public CardView cd;
         public LinearLayout layout;
 
 
@@ -110,8 +113,11 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.MainLi
             super(itemView);
             mTitle = (TextView) itemView.findViewById(R.id.cardview_title);
             mContent = (TextView) itemView.findViewById(R.id.cardview_content);
-            mColor = (TextView) itemView.findViewById(R.id.cardview_color);
+            mColor = (ImageView) itemView.findViewById(R.id.cardview_color);
+            mColor.setPadding(0,0,0,0);
             mDate = (TextView) itemView.findViewById(R.id.cardview_time);
+            cd=(CardView)itemView.findViewById(R.id.l_cardview);
+            cd.setPreventCornerOverlap(false);
             layout = (LinearLayout) itemView.findViewById(R.id.cardview_linear);
             if (canClick) {
                 itemView.setOnClickListener(this);

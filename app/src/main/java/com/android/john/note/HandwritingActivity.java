@@ -11,7 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
-import com.android.john.note_01.R;
+import com.android.john.note.R;
 
 import java.io.ByteArrayOutputStream;
 

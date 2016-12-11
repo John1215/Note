@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,7 +41,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.john.note_01.R;
+import com.android.john.note.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -87,6 +89,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
     private Button mCameraButton;
     private Button mGalleryButton;
     private int mContentEditTextWidth;
+    private CardView mCardview;
 
     //手指向右滑动时的最小速度
     private static final int XSPEED_MIN = 200;
@@ -94,11 +97,14 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
     //手指向右滑动时的最小距离
     private static final int XDISTANCE_MIN = 150;
 
+    private static final int YDISTANCE_MIN = 80;
+
     //记录手指按下时的横坐标。
     private float xDown;
 
     //记录手指移动时的横坐标。
     private float xMove;
+
 
     //用于计算手指滑动的速度。
     private VelocityTracker mVelocityTracker;
@@ -118,11 +124,12 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         initView();
         relativeLayout = (RelativeLayout) findViewById(R.id.edit_main);
         relativeLayout.setOnTouchListener(this);
-
+        mCardview=(CardView)findViewById(R.id.edit_cardview);
         mImageMaterialDialog = new MaterialDialog(this);
         View selectView = LayoutInflater.from(this).inflate(R.layout.img_popup_window, null, false);
         mImageMaterialDialog.setCanceledOnTouchOutside(true);
         mImageMaterialDialog.setView(selectView);
+        //mImageMaterialDialog.
         mCameraButton = (Button) selectView.findViewById(R.id.camera_button);
         mGalleryButton = (Button) selectView.findViewById(R.id.gallery_button);
         mGalleryButton.setOnClickListener(new View.OnClickListener() {
@@ -167,11 +174,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
             @Override
             public void onClick(View v) {
                 mImageMaterialDialog.show();
-//                Intent getImage = new Intent(Intent.ACTION_GET_CONTENT);
-//                getImage.addCategory(Intent.CATEGORY_OPENABLE);
-//                getImage.setType("image/*");
-////                Intent getImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(getImage, REQUEST_IMAGE);
+//
             }
         });
 
@@ -200,14 +203,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         }
         mDateTextView.setText(mNoteItem.getFormatDateString());
 
-//        String ic_edit_color = getIntent().getStringExtra("ic_edit_color");
-//        if(ic_edit_color.equals("photo")){
-//            mImageMaterialDialog.show();
-//        }
-//        if(ic_edit_color.equals("handwriting")){
-//            Intent i = new Intent(EditActivity.this, HandwritingActivity.class);
-//            startActivityForResult(i, REQUEST_HANDWRITING);
-//        }
+//
     }
 
     @Override
@@ -420,11 +416,14 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 xDown = event.getRawX();
+
                 break;
             case MotionEvent.ACTION_MOVE:
                 xMove = event.getRawX();
+
                 //活动的距离
                 int distanceX = (int) (xMove - xDown);
+
                 //获取瞬时速度
                 int xSpeed = getScrollVelocity();
                 //当滑动的距离大于我们设定的最小距离且滑动的瞬间速度大于我们设定的速度时，返回到上一个activity
@@ -432,8 +431,8 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
 //                    Toast.makeText(this, "返回", Toast.LENGTH_SHORT).show();
                     //finish();
                     finishActivity();
-
                 }
+
                 break;
             case MotionEvent.ACTION_UP:
                 recycleVelocityTracker();
@@ -508,6 +507,15 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         mVelocityTracker.computeCurrentVelocity(1000);
         int velocity = (int) mVelocityTracker.getXVelocity();
         return Math.abs(velocity);
+    }
+    //关闭输入法
+    private void closeInputMethod() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        boolean isOpen = imm.isActive();
+        if (isOpen) {
+            // imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);//没有显示则显示
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        }
     }
 
 

@@ -9,6 +9,7 @@
     tools:context="com.android.john.note.EditActivity">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/edit_cardview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
@@ -105,11 +106,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_centerHorizontal="true"
-
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:background="@null"
-                    android:scaleType="fitXY"
+
                     app:srcCompat="@drawable/ic_edit_color"/>
 
                 <ImageButton
@@ -117,7 +119,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/edit_color_choose"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginLeft="@dimen/btn_margin"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:background="@null"
                     app:srcCompat="@drawable/ic_edit_pic"/>
 
@@ -126,8 +130,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/edit_pic_add"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginLeft="@dimen/btn_margin"
                     android:background="@null"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     app:srcCompat="@drawable/ic_edit_handwriting"/>
 
                 <ImageButton
@@ -135,8 +141,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/edit_handwriting"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginLeft="@dimen/btn_margin"
                     android:background="@null"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     app:srcCompat="@drawable/ic_edit_scan"
                     />
 
@@ -145,8 +153,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/edit_scan"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginLeft="@dimen/btn_margin"
                     android:background="@null"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     app:srcCompat="@drawable/ic_edit_team"
                     />
 
@@ -155,8 +165,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="10dp"
                     android:background="@null"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     app:srcCompat="@drawable/ic_edit_save"
                     />
             </RelativeLayout>

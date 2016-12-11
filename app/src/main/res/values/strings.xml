@@ -19,4 +19,6 @@
     <string name="login_password_hint">密码</string>
     <string name="login_panel_login">登录</string>
     <string name="login_panel_cancel">取消</string>
+    <string name="drawer_setting">选项</string>
+    <string name="drawer_mark">标记</string>
 </resources>

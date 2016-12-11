@@ -39,7 +39,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.john.note_01.R;
+import com.android.john.note.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -86,14 +86,19 @@ public class MainActivity extends AppCompatActivity {
     private EditText mEditText;
     //侧滑栏按钮
     private ListView drawer_btn_list;
+    private ListView drawer_mark_list;
     private List<String> choices;
     private List<Integer> choiceIcon;
+    private List<String> mark_tag;
+    private List<Integer> mark_icon;
     private MainListAdapter recyclerAdapter;
     private FloatingActionButton fab;
     private Activity mContext;
     private RecyclerViewSwipe recyclerView;
     private LinearLayoutManager manager;
-    private ListAdapter adapter;
+    private ListAdapter btn_adapter;
+    private ListAdapter mark_adapter;
+
     private TextView drawer_login_btn;
     private TextView login_btn;
     private TextView cancel_btn;
@@ -136,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                         recyclerView.invalidate();
                         Toast.makeText(mContext, "同步完成", Toast.LENGTH_SHORT).show();
                     }
-                    swipeRefreshLayout.setRefreshing(false);
+                //    swipeRefreshLayout.setRefreshing(false);
                     recyclerView.invalidate();
                     break;
                 case 2:
@@ -195,16 +200,33 @@ public class MainActivity extends AppCompatActivity {
     private void initData() {
         choices = new ArrayList<>();
         choiceIcon = new ArrayList<>();
+        mark_tag=new ArrayList<>();
+        mark_icon = new ArrayList<>();
+
+
         choices.add("同步");
-        //choices.add("回收站");
-        //choices.add("设置");
+        choices.add("下载");
         choices.add("反馈");
         choices.add("帮助");
+        mark_tag.add("红色");
+        mark_tag.add("蓝色");
+        mark_tag.add("绿色");
+        mark_tag.add("青色");
+        mark_tag.add("紫色");
+        mark_tag.add("橙色");
+
         choiceIcon.add(R.drawable.ic_drawer_sync);
-      //  choiceIcon.add(R.drawable.ic_drawer_recycle);
-      //  choiceIcon.add(R.drawable.ic_drawer_setting);
+        choiceIcon.add(R.drawable.ic_drawer_download);
         choiceIcon.add(R.drawable.ic_drawer_feedback);
         choiceIcon.add(R.drawable.ic_drawer_help);
+
+        mark_icon.add(R.drawable.color_button_red);
+        mark_icon.add(R.drawable.color_button_blue);
+        mark_icon.add(R.drawable.color_button_green);
+        mark_icon.add(R.drawable.color_button_cyan);
+        mark_icon.add(R.drawable.color_button_purple);
+        mark_icon.add(R.drawable.color_button_orange);
+
 
     }
 
@@ -246,11 +268,38 @@ public class MainActivity extends AppCompatActivity {
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         //侧滑栏按钮
+        drawer_mark_list=(ListView)findViewById(R.id.mark_list);
+        mark_adapter=new com.android.john.note.MarkAdapter(this,mark_tag,mark_icon);
+        drawer_mark_list.setAdapter(mark_adapter);
+        drawer_mark_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(mark_tag.get(i).equals("红色")){
+                    OrderByColor("#FF5252");
+                }
+                else if(mark_tag.get(i).equals("蓝色")){
+                    OrderByColor("#03A9F4");
+                }
+                else if(mark_tag.get(i).equals("青色")){
+                    OrderByColor("#00BCD4");
+                }
+                else if(mark_tag.get(i).equals("橙色")){
+                    OrderByColor("#FF9800");
+                }
+                else if(mark_tag.get(i).equals("紫色")){
+                    OrderByColor("#673AB7");
+                }
+                else if(mark_tag.get(i).equals("绿色")){
+                    OrderByColor("#4CAF50");
+                }
+            }
+        });
+
+
+
         drawer_btn_list = (ListView) findViewById(R.id.btn_list);
-
-
-        adapter = new com.android.john.note.MenuAdapter(this, choices, choiceIcon);
-        drawer_btn_list.setAdapter(adapter);
+        btn_adapter = new com.android.john.note.MenuAdapter(this, choices, choiceIcon);
+        drawer_btn_list.setAdapter(btn_adapter);
         drawer_btn_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -265,10 +314,9 @@ public class MainActivity extends AppCompatActivity {
                     uploadNoteItems(username);
                     uploadImages(username);
 
-                }else if(choices.get(position).equals("回收站")){
-                    Toast.makeText(mContext, "回收站", Toast.LENGTH_SHORT).show();
-                }else if(choices.get(position).equals("设置")){
-                    Toast.makeText(mContext, "设置", Toast.LENGTH_SHORT).show();
+                }else if(choices.get(position).equals("下载")){
+                    mHandler.sendEmptyMessage(1);
+
                 }else if(choices.get(position).equals("反馈")){
                     Toast.makeText(mContext, "反馈", Toast.LENGTH_SHORT).show();
                 }else{
@@ -285,7 +333,8 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        mHandler.sendEmptyMessage(1);
+                        updateUI();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 }).start();
             }
@@ -301,9 +350,6 @@ public class MainActivity extends AppCompatActivity {
 
         //浮动按钮
         fab = (FloatingActionButton) findViewById(R.id.fab);
-       // fab.setPosition(FloatingActionButtonPlus.POS_RIGHT_BOTTOM);
-       // fab.setAnimation(FloatingActionButton.ANIM_SCALE);
-     //   fab.setAnimationDuration(150);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -315,39 +361,6 @@ public class MainActivity extends AppCompatActivity {
                 mContext.startActivity(i);
             }
         });
-//        fab.setVisibility(View.VISIBLE);
-//        fab.setOnItemClickListener(new FloatingActionButtonPlus.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(FabTagLayout tagView, int position) {
-//                Toast.makeText(MainActivity.this, "Click btn" + position, Toast.LENGTH_SHORT).show();
-//                if (position == 0) {
-//                    //new note
-//                    NoteItem item = new NoteItem();
-//                    NoteLab.get(getApplicationContext()).addNoteItem(item);
-//                    Intent i = EditActivity.newIntent(getApplicationContext());
-//                    i.putExtra("UUID", item.getId());
-////                    i.putExtra("ic_edit_color", "note");
-//                    mContext.startActivity(i);
-//                }
-//                  else if(position == 1){
-//                    NoteItem item = new NoteItem();
-//                    NoteLab.get(getApplicationContext()).addNoteItem(item);
-//                    Intent i = EditActivity.newIntent(getApplicationContext());
-//                    i.putExtra("UUID", item.getId());
-//                    i.putExtra("ic_edit_color", "photo");
-//                    mContext.startActivity(i);
-//                }else{
-//                    NoteItem item = new NoteItem();
-//                    NoteLab.get(getApplicationContext()).addNoteItem(item);
-//                    Intent i = EditActivity.newIntent(getApplicationContext());
-//                    i.putExtra("UUID", item.getId());
-//                    i.putExtra("ic_edit_color", "handwriting");
-//                    mContext.startActivity(i);
-//                }
-//            }
-//        });
-
-
         login_panel = new MaterialDialog(this);
         View view = LayoutInflater.from(this).inflate(R.layout.login_popup_window, null);
         login_panel.setView(view);
@@ -686,6 +699,12 @@ public class MainActivity extends AppCompatActivity {
         String imagePath = context.getFilesDir() + "/Images/" + filename;
 //        Log.i(TAG, "saved file path:" + imagePath);
         return imagePath;
+    }
+
+    private void OrderByColor(String color){
+        List<NoteItem> items =NoteLab.get(getApplicationContext()).queryNoteItemByColor(color);
+        recyclerAdapter.setNoteItems(items);
+        recyclerAdapter.notifyDataSetChanged();
     }
 }
 

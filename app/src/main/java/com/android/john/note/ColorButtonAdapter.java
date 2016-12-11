@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.android.john.note_01.R;
+import com.android.john.note.R;
 
 import java.util.List;
 
