@@ -200,11 +200,11 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         }
         mDateTextView.setText(mNoteItem.getFormatDateString());
 
-//        String tag = getIntent().getStringExtra("tag");
-//        if(tag.equals("photo")){
+//        String ic_edit_color = getIntent().getStringExtra("ic_edit_color");
+//        if(ic_edit_color.equals("photo")){
 //            mImageMaterialDialog.show();
 //        }
-//        if(tag.equals("handwriting")){
+//        if(ic_edit_color.equals("handwriting")){
 //            Intent i = new Intent(EditActivity.this, HandwritingActivity.class);
 //            startActivityForResult(i, REQUEST_HANDWRITING);
 //        }
@@ -354,7 +354,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(), color_grid_adapter.getItem(i).toString(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), color_grid_adapter.getItem(i).toString(), Toast.LENGTH_SHORT).show();
                 changeColor(color_grid_adapter.getItem(i).toString());
                 ColorChoosePanel.dismiss();
 
@@ -365,6 +365,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         // ColorChoosePanel.setCanceledOnTouchOutside(true);
         // ColorChoosePanel.setTitle("颜色");
         ColorChoosePanel.setContentView(gridView);
+        ColorChoosePanel.setCanceledOnTouchOutside(true);
         //底部ImageButton
         color_chose = (ImageButton) findViewById(R.id.edit_color_choose);
         color_chose.setElevation(2);

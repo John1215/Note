@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:toolbar="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/RecyclerviewBG"
-    xmlns:toolbar="http://schemas.android.com/tools">
+    android:background="@color/RecyclerviewBG">
     <!--toolbar-->
-    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="2dp"
         android:paddingTop="20dp"
         android:titleTextColor="@color/colorWhite"
-        android:elevation="2dp"
-        android:background="@color/colorPrimary"
         app:navigationIcon="@drawable/ic_btn_slide_bar"
+        app:theme="@style/OverFlowMenuTheme"
         app:title="@string/toolbar_title"
         app:titleTextColor="@color/colorWhite"
-        app:theme="@style/OverFlowMenuTheme"
         >
+
         <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
@@ -34,87 +37,27 @@
     </android.support.v7.widget.Toolbar>
     <!--swiperefresh-->
     <android.support.v4.widget.SwipeRefreshLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+        android:id="@+id/swiperefreshlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="75dp"
-    android:id="@+id/swiperefreshlayout">
-    <!--RecycleView-->
+        android:orientation="vertical">
+        <!--RecycleView-->
         <com.android.john.note.RecyclerViewSwipe
             android:id="@+id/recycleview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
     </android.support.v4.widget.SwipeRefreshLayout>
     <!--fab-->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_gravity="bottom|right"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@color/colorAccent"
+        android:layout_gravity="bottom|right"
         android:layout_margin="15dp"
+        android:background="@color/colorAccent"
         android:src="@drawable/ic_fab_add"
+        app:layout_behavior="com.android.john.note.FabBehavior"
         />
-    <!--<com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus-->
-        <!--android:id="@+id/FabPlus"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:switchFabColor="@color/colorAccent"-->
-        <!--app:switchFabIcon="@drawable/ic_fab_add"-->
-        <!--app:layout_behavior="com.lzp.floatingactionbuttonplus.FabBehavior"-->
-        <!--app:mBackgroundColor="#98ffffff"-->
-        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--xmlns:app="http://schemas.android.com/apk/res-auto">-->
 
-        <!--&lt;!&ndash;<com.lzp.floatingactionbuttonplus.FabTagLayout&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-            <!--&lt;!&ndash;app:tagText="@string/fab_item_title_note"&ndash;&gt;-->
-            <!--&lt;!&ndash;&gt;&ndash;&gt;-->
-            <!--&lt;!&ndash;<android.support.design.widget.FloatingActionButton&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:src="@drawable/ic_fab_item_note"&ndash;&gt;-->
-                <!--&lt;!&ndash;app:backgroundTint="@color/colorWhite"&ndash;&gt;-->
-                <!--&lt;!&ndash;app:fabSize="mini" />&ndash;&gt;-->
-        <!--&lt;!&ndash;</com.lzp.floatingactionbuttonplus.FabTagLayout>&ndash;&gt;-->
-
-        <!--&lt;!&ndash;<com.lzp.floatingactionbuttonplus.FabTagLayout&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-            <!--&lt;!&ndash;app:tagText="@string/fab_item_title_camera"&ndash;&gt;-->
-            <!--&lt;!&ndash;&gt;&ndash;&gt;-->
-            <!--&lt;!&ndash;<android.support.design.widget.FloatingActionButton&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:src="@drawable/ic_fab_item_camera"&ndash;&gt;-->
-                <!--&lt;!&ndash;app:backgroundTint="@color/colorWhite"&ndash;&gt;-->
-                <!--&lt;!&ndash;app:fabSize="mini" />&ndash;&gt;-->
-        <!--&lt;!&ndash;</com.lzp.floatingactionbuttonplus.FabTagLayout>&ndash;&gt;-->
-
-        <!--&lt;!&ndash;<com.lzp.floatingactionbuttonplus.FabTagLayout&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-            <!--&lt;!&ndash;app:tagText="@string/fab_item_title_handwriting"&ndash;&gt;-->
-            <!--&lt;!&ndash;&gt;&ndash;&gt;-->
-
-            <!--&lt;!&ndash;<android.support.design.widget.FloatingActionButton&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_marginTop="15dp"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:src="@drawable/ic_fab_item_handwriting"&ndash;&gt;-->
-                <!--&lt;!&ndash;app:backgroundTint="@color/colorWhite"&ndash;&gt;-->
-                <!--&lt;!&ndash;app:fabSize="mini" />&ndash;&gt;-->
-        <!--&lt;!&ndash;</com.lzp.floatingactionbuttonplus.FabTagLayout>&ndash;&gt;-->
-
-
-    <!--</com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus>-->
-    <!--<TextView-->
-        <!--android:id="@+id/bottom_text"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="20dp"-->
-        <!--android:text="已经到底部"-->
-        <!--android:layout_gravity="bottom|center"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--/>-->
 </android.support.design.widget.CoordinatorLayout>

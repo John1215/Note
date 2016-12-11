@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/edit_main"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                tools:context="com.android.john.note.EditActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/edit_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="4dp"
+    tools:context="com.android.john.note.EditActivity">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -62,7 +63,7 @@
                 android:hint="@string/edit_content_hint"
                 android:textColor="@color/colorGray"
                 android:textSize="20sp"
-                android:paddingBottom="15dp"
+                android:paddingBottom="50dp"
                 />
 
         </RelativeLayout>
@@ -104,36 +105,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_centerHorizontal="true"
+
                     android:background="@null"
-                    android:src="@drawable/ic_edit_color"/>
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/ic_edit_color"/>
 
                 <ImageButton
                     android:id="@+id/edit_pic_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/edit_color_choose"
-                    android:layout_marginLeft="55dp"
+                    android:layout_marginLeft="60dp"
                     android:background="@null"
-                    android:src="@drawable/ic_edit_pic"/>
+                    app:srcCompat="@drawable/ic_edit_pic"/>
 
                 <ImageButton
                     android:id="@+id/edit_handwriting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/edit_pic_add"
-                    android:layout_marginLeft="55dp"
+                    android:layout_marginLeft="60dp"
                     android:background="@null"
-                    android:src="@drawable/ic_edit_handwriting"/>
+                    app:srcCompat="@drawable/ic_edit_handwriting"/>
 
                 <ImageButton
                     android:id="@+id/edit_scan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/edit_handwriting"
-                    android:layout_marginLeft="55dp"
+                    android:layout_marginLeft="60dp"
                     android:background="@null"
-                    android:src="@drawable/ic_edit_scan"
+                    app:srcCompat="@drawable/ic_edit_scan"
                     />
 
                 <ImageButton
@@ -141,9 +145,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/edit_scan"
-                    android:layout_marginLeft="55dp"
+                    android:layout_marginLeft="60dp"
                     android:background="@null"
-                    android:src="@drawable/ic_edit_team"
+                    app:srcCompat="@drawable/ic_edit_team"
                     />
 
                 <ImageButton
@@ -153,7 +157,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
                     android:background="@null"
-                    android:src="@drawable/ic_edit_save"
+                    app:srcCompat="@drawable/ic_edit_save"
                     />
             </RelativeLayout>
         </RelativeLayout>

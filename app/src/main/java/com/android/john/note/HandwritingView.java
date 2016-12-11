@@ -46,8 +46,13 @@ public class HandwritingView extends View {
         mBoxPaint = new Paint();
         mBoxPaint.setColor(Color.BLACK);
         mBoxPaint.setAntiAlias(true);
-        mBoxPaint.setStrokeWidth(10);
+        mBoxPaint.setStrokeWidth(25);
+        mBoxPaint.setDither(true);
         mBoxPaint.setStyle(Paint.Style.STROKE);
+        mBoxPaint.setAntiAlias(true);
+        mBoxPaint.setStrokeJoin(Paint.Join.ROUND);
+        mBoxPaint.setStrokeCap(Paint.Cap.ROUND);
+
 
 
 //        mRubberPaint.setColor(0x22ff2222);
@@ -59,13 +64,13 @@ public class HandwritingView extends View {
         mRubberPaint = new Paint();
 //        mRubberPaint.setAlpha(0);
 //        mRubberPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        mRubberPaint.setColor(0xfff8efe0);
+        mRubberPaint.setColor(0xffffffff);
         mRubberPaint.setAntiAlias(true);
-        mRubberPaint.setStrokeWidth(30);
+        mRubberPaint.setStrokeWidth(40);
         mRubberPaint.setStyle(Paint.Style.STROKE);
 
         mBackgroundPaint = new Paint();
-        mBackgroundPaint.setColor(0xfff8efe0);
+        mBackgroundPaint.setColor(0xffffffff);
 
     }
 
@@ -78,14 +83,16 @@ public class HandwritingView extends View {
             case MotionEvent.ACTION_DOWN:
                 action = "ACTION_DOWN";
                 mCurrentPath = new Path();
-                mCurrentPath.moveTo(current.x, current.y);
+              mCurrentPath.moveTo(current.x, current.y);
+              //  mCurrentPath.lineTo(current.x,current.y);
                 mCurrentMyPath = new myPath(mCurrentPath, isRubber);
                 mPaths.add(mCurrentMyPath);
                 break;
             case MotionEvent.ACTION_MOVE:
                 action = "ACTION_MOVE";
                 if(mCurrentPath != null){
-                    mCurrentPath.quadTo(current.x, current.y, current.x, current.y);
+                    mCurrentPath.cubicTo(current.x,current.y,current.x,current.y,current.x,current.y);
+                   // mCurrentPath.quadTo(current.x, current.y, current.x, current.y);
                     invalidate();
                 }
                 break;

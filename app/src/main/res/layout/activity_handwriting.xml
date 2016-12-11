@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_handwriting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+   android:padding="4dp"
     tools:context="com.android.john.note.HandwritingActivity">
 
     <android.support.v7.widget.CardView
@@ -23,12 +20,14 @@
         <com.android.john.note.HandwritingView
             android:id="@+id/hand_drawing_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_marginBottom="45dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_gravity="bottom">
+            android:layout_height="35dp"
+            android:layout_gravity="bottom"
+            android:paddingBottom="15dp">
 
 
             <ImageButton
@@ -36,18 +35,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="12dp"
+                android:layout_marginLeft="20dp"
                 android:background="@null"
-                android:src="@drawable/ic_handwriting_pen"/>
-
+                app:srcCompat="@drawable/ic_handwriting_pen"/>
             <ImageButton
-                android:id="@+id/handwriting_rubber"
+                android:id="@+id/handwriting_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/handwriting_pen"
                 android:layout_marginLeft="55dp"
                 android:background="@null"
-                android:src="@drawable/ic_handwriting_rubber"
+                app:srcCompat="@drawable/ic_handwriting_color"
+                />
+
+            <ImageButton
+                android:id="@+id/handwriting_rubber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/handwriting_color"
+                android:layout_marginLeft="55dp"
+                android:background="@null"
+                app:srcCompat="@drawable/ic_handwriting_rubber"
                 />
 
             <ImageButton
@@ -57,7 +65,7 @@
                 android:layout_alignLeft="@id/handwriting_rubber"
                 android:layout_marginLeft="55dp"
                 android:background="@null"
-                android:src="@drawable/ic_handwriting_undo"/>
+                app:srcCompat="@drawable/ic_handwriting_undo"/>
 
             <ImageButton
                 android:id="@+id/handwriting_clear"
@@ -66,16 +74,16 @@
                 android:layout_alignLeft="@id/handwriting_undo"
                 android:layout_marginLeft="55dp"
                 android:background="@null"
-                android:src="@drawable/ic_handwriting_clear"/>
+                app:srcCompat="@drawable/ic_handwriting_clear"/>
 
             <ImageButton
                 android:id="@+id/handwriting_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="20dp"
                 android:background="@null"
-                android:src="@drawable/ic_edit_save"/>
+                app:srcCompat="@drawable/ic_handwriting_save"/>
 
 
 

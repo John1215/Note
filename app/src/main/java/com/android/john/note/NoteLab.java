@@ -4,7 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +22,7 @@ import database.NoteDbSchema.NoteTable;
  */
 
 public class NoteLab {
+    private static final String TAG = NoteLab.class.getSimpleName();
     private static NoteLab sNoteLab;
 
     //    private List<NoteItem> mNoteItems;
@@ -78,6 +82,24 @@ public class NoteLab {
         }
     }
 
+    public List<NoteItem> queryNoteItemByColor(String color){
+        List<NoteItem> items = new ArrayList<>();
+        NoteCursorWrapper cursor = quertNoteItems(
+                NoteTable.Cols.COLOR + " = ?",
+                new String[]{color});
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                items.add(cursor.getNoteItem());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return items;
+
+    }
+
     public void addNoteItem(NoteItem item) {
         ContentValues values = getContentValues(item);
         mDatabase.insert(NoteTable.NAME, null, values);
@@ -88,6 +110,40 @@ public class NoteLab {
         mDatabase.delete(NoteTable.NAME,
                 NoteTable.Cols.UUID + " = ?",
                 new String[]{item.getId().toString()});
+    }
+
+    public void removeNoteItemById(String uuid){
+        mDatabase.delete(NoteTable.NAME,
+                NoteTable.Cols.UUID + " = ?",
+                new String[]{uuid});
+    }
+
+    public List<NoteItem> queryNoteItems(String text) throws ParseException {
+        List<NoteItem> items = new ArrayList<>();
+        String sql = "select * from " + NoteTable.NAME + " where title like ? or content like ?";
+        String[] args = new String[]{"%" + text + "%", "%" + text + "%"};
+        Cursor cursor = mDatabase.rawQuery(sql, args);
+        if(cursor.getCount() == 0){
+            Log.i(TAG, "find nothing!!!");
+            return null;
+        }
+        cursor.moveToFirst();
+        Log.i(TAG, "querying....");
+        while (!cursor.isAfterLast()) {
+            String uuid = cursor.getString(cursor.getColumnIndex("uuid"));
+            NoteItem item = new NoteItem(UUID.fromString(uuid));
+            item.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+            Log.i(TAG, "query title:" + cursor.getString(cursor.getColumnIndex("title")));
+            item.setContent(cursor.getString(cursor.getColumnIndex("content")));
+            Log.i(TAG, "query content:" + cursor.getString(cursor.getColumnIndex("content")));
+            item.setColor(cursor.getString(cursor.getColumnIndex("color")));
+            String date = cursor.getString(cursor.getColumnIndex("date"));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日,kk:mm");
+            item.setDate(simpleDateFormat.parse(date));
+            items.add(item);
+            cursor.moveToNext();
+        }
+        return items;
     }
 
     public void updateNoteItem(NoteItem item) {
