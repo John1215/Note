@@ -358,13 +358,11 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         });
         //颜色选择面板弹出
         ColorChoosePanel = new MaterialDialog(this);
-        // ColorChoosePanel.setCanceledOnTouchOutside(true);
-        // ColorChoosePanel.setTitle("颜色");
+
         ColorChoosePanel.setContentView(gridView);
         ColorChoosePanel.setCanceledOnTouchOutside(true);
         //底部ImageButton
         color_chose = (ImageButton) findViewById(R.id.edit_color_choose);
-        color_chose.setElevation(2);
         color_chose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -7,10 +7,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,14 +31,25 @@ public class HandwritingView extends View {
 
     private Path mCurrentPath;
     private myPath mCurrentMyPath;
-    private List<myPath> mPaths = new ArrayList<>();
+    private List<myPath> mPaths = new ArrayList<>(20);
     private Paint mBoxPaint;
     private Paint mRubberPaint;
     private Paint mBackgroundPaint;
+    private Bitmap mBitmap;
+    private static int colorCode = Color.BLACK;
+    private Rect mSrcRect, mDestRect;
+    private boolean delete_flag =false;
 
     //Used when creating the view in the code
     public HandwritingView(Context context) {
         super(context);
+    }
+
+    public void chooseColor(int color) {
+        colorCode = color;
+        String tmp = String.valueOf(colorCode);
+     //   Toast.makeText(getContext(), tmp, Toast.LENGTH_SHORT).show();
+        mBoxPaint.setColor(colorCode);
     }
 
     //Used when inflating the view from xml
@@ -44,15 +57,14 @@ public class HandwritingView extends View {
         super(context, attrs);
 
         mBoxPaint = new Paint();
-        mBoxPaint.setColor(Color.BLACK);
         mBoxPaint.setAntiAlias(true);
-        mBoxPaint.setStrokeWidth(25);
+        mBoxPaint.setStrokeWidth(50);
         mBoxPaint.setDither(true);
         mBoxPaint.setStyle(Paint.Style.STROKE);
         mBoxPaint.setAntiAlias(true);
         mBoxPaint.setStrokeJoin(Paint.Join.ROUND);
         mBoxPaint.setStrokeCap(Paint.Cap.ROUND);
-
+        mBitmap=Bitmap.createBitmap(400,400, Bitmap.Config.ARGB_8888);
 
 
 //        mRubberPaint.setColor(0x22ff2222);
@@ -66,7 +78,7 @@ public class HandwritingView extends View {
 //        mRubberPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
         mRubberPaint.setColor(0xffffffff);
         mRubberPaint.setAntiAlias(true);
-        mRubberPaint.setStrokeWidth(40);
+        mRubberPaint.setStrokeWidth(50);
         mRubberPaint.setStyle(Paint.Style.STROKE);
 
         mBackgroundPaint = new Paint();
@@ -79,24 +91,29 @@ public class HandwritingView extends View {
         PointF current = new PointF(event.getX(), event.getY());
         String action = "";
 
-        switch (event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 action = "ACTION_DOWN";
                 mCurrentPath = new Path();
-              mCurrentPath.moveTo(current.x, current.y);
-              //  mCurrentPath.lineTo(current.x,current.y);
-                mCurrentMyPath = new myPath(mCurrentPath, isRubber);
+                mCurrentPath.moveTo(current.x, current.y);
+                //  mCurrentPath.lineTo(current.x,current.y);
+                mCurrentMyPath = new myPath(mCurrentPath, isRubber, mBoxPaint.getColor());
+                if(mPaths.size()==25){
+                    mBitmap=getBitmap();
+                    invalidate();
+                    mPaths.remove(0);
+                }
                 mPaths.add(mCurrentMyPath);
                 break;
             case MotionEvent.ACTION_MOVE:
                 action = "ACTION_MOVE";
-                if(mCurrentPath != null){
-                    mCurrentPath.cubicTo(current.x,current.y,current.x,current.y,current.x,current.y);
-                   // mCurrentPath.quadTo(current.x, current.y, current.x, current.y);
+                if (mCurrentPath != null) {
+                    mCurrentPath.cubicTo(current.x, current.y, current.x, current.y, current.x, current.y);
+                    // mCurrentPath.quadTo(current.x, current.y, current.x, current.y);
                     invalidate();
                 }
                 break;
-            case  MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_UP:
                 action = "ACTION_UP";
                 mCurrentPath = null;
                 break;
@@ -112,74 +129,95 @@ public class HandwritingView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //fill the background
-        Log.i(TAG, "handling onDraw");
-        canvas.drawPaint(mBackgroundPaint);
+        if(delete_flag){
+            canvas.drawPaint(mBackgroundPaint);
+            mPaths.clear();
+            mBitmap=Bitmap.createBitmap(400,400, Bitmap.Config.ARGB_8888);
+            delete_flag=false;
+        }
+        mSrcRect =new Rect(0,0,getWidth(),getHeight());
+        mDestRect=new Rect(0,0,getWidth(),getHeight());
+        canvas.drawBitmap(mBitmap,mSrcRect,mDestRect,null);
 
-        for(myPath path : mPaths){
-            if(path.isRubber()){
+       //
+
+        for (myPath path : mPaths) {
+            if (path.isRubber()) {
                 canvas.drawPath(path.getPath(), mRubberPaint);
-            }else{
-                canvas.drawPath(path.getPath(), mBoxPaint);
+            } else {
+                Paint paint = new Paint();
+                paint.setAntiAlias(true);
+                paint.setStrokeWidth(50);
+                paint.setDither(true);
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setAntiAlias(true);
+                paint.setStrokeJoin(Paint.Join.ROUND);
+                paint.setStrokeCap(Paint.Cap.ROUND);
+                paint.setColor(path.getColor());
+                canvas.drawPath(path.getPath(), paint);
             }
             //            canvas.drawPath(path, mBoxPaint);
         }
     }
 
-    public void setRubber(){
+
+    public void setRubber() {
         isRubber = true;
     }
-    public void setPen(){
+
+    public void setPen() {
         isRubber = false;
     }
 
-    public void undo(){
-        if(!mPaths.isEmpty()) {
+    public void undo() {
+        if (!mPaths.isEmpty()) {
             mPaths.remove(mPaths.size() - 1);
             invalidate();
         }
     }
 
-    public void deleteAll(){
+    public void deleteAll() {
         mPaths.clear();
+        delete_flag=true;
         invalidate();
     }
 
-    public void saveDrawing(Context context){
+    public void saveDrawing(Context context) {
         Bitmap bitmap = getBitmap();
 
         File dir = new File(context.getFilesDir(), "Bitmap");
         System.out.println("directory:" + context.getFilesDir());
-        if(!dir.exists()){
+        if (!dir.exists()) {
             System.out.println("isSuccess?" + dir.mkdirs());
         }
         String filename = System.currentTimeMillis() + ".jpg";
         File file = new File(dir, filename);
-        try{
+        try {
             FileOutputStream out = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
-        }catch (IOException ioe){
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
 
-    public Bitmap getBitmap(){
+    public Bitmap getBitmap() {
         Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-
         draw(canvas);
         return bitmap;
     }
 
-    public class myPath{
+    public class myPath {
         private Path mPath;
         private boolean mIsRubber;
+        private int mColor;
 
-        public myPath(Path path, boolean flag){
+        public myPath(Path path, boolean flag, int color) {
             mPath = path;
             mIsRubber = flag;
+            mColor = color;
         }
 
         public Path getPath() {
@@ -189,5 +227,10 @@ public class HandwritingView extends View {
         public boolean isRubber() {
             return mIsRubber;
         }
+
+        public int getColor() {
+            return mColor;
+        }
     }
+
 }

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "com.android.john.note_01"
+        applicationId "com.android.john.note"
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
@@ -30,7 +30,6 @@ dependencies {
     compile 'com.android.support:cardview-v7:25.0.0'
     compile 'com.android.support:design:25.0.0'
     compile 'com.android.support:recyclerview-v7:25.0.0'
-    compile 'com.lzp.floatingactionbutton:floatingactionbuttonplus:1.0.0'
     compile 'me.drakeet.materialdialog:library:1.3.1'
     compile 'com.loopj.android:android-async-http:1.4.9'
 }

@@ -17,6 +17,7 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,8 +45,7 @@ import com.android.john.note.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.lzp.floatingactionbuttonplus.FabTagLayout;
-import com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus;
+
 
 
 import org.json.JSONArray;
@@ -55,6 +56,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -230,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+//
     private void initView() {
         //工具栏
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -267,6 +269,8 @@ public class MainActivity extends AppCompatActivity {
 
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        //控制drawerlayout触发边距
+        setDrawerLeftEdgeSize(this,drawerLayout,0.3f);
         //侧滑栏按钮
         drawer_mark_list=(ListView)findViewById(R.id.mark_list);
         mark_adapter=new com.android.john.note.MarkAdapter(this,mark_tag,mark_icon);
@@ -700,11 +704,32 @@ public class MainActivity extends AppCompatActivity {
 //        Log.i(TAG, "saved file path:" + imagePath);
         return imagePath;
     }
-
+//颜色排序
     private void OrderByColor(String color){
         List<NoteItem> items =NoteLab.get(getApplicationContext()).queryNoteItemByColor(color);
         recyclerAdapter.setNoteItems(items);
         recyclerAdapter.notifyDataSetChanged();
+        drawerLayout.closeDrawers();
+        Toast.makeText(getApplicationContext(),"下拉显示全部",Toast.LENGTH_SHORT).show();
+
+    }
+
+
+//控制DrawerLayout滑动触发距离
+    public static void setDrawerLeftEdgeSize(Activity activity, DrawerLayout drawerLayout, float displayWidthPercentage) {
+        if (activity == null || drawerLayout == null) return;
+        try {
+            Field leftDraggerField = drawerLayout.getClass().getDeclaredField("mLeftDragger");
+            leftDraggerField.setAccessible(true);
+            ViewDragHelper leftDragger = (ViewDragHelper) leftDraggerField.get(drawerLayout);
+            Field edgeSizeField = leftDragger.getClass().getDeclaredField("mEdgeSize");
+            edgeSizeField.setAccessible(true);
+            int edgeSize = edgeSizeField.getInt(leftDragger);
+            DisplayMetrics dm = new DisplayMetrics();
+            activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+            edgeSizeField.setInt(leftDragger, Math.max(edgeSize, (int) (dm.widthPixels * displayWidthPercentage)));
+        } catch (Exception e) {
+        }
     }
 }
 

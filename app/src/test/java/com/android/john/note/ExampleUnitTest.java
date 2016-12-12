@@ -1,4 +1,4 @@
-package com.android.john.note_01;
+package com.android.john.note;
 
 import org.junit.Test;
 
