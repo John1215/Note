@@ -21,4 +21,7 @@
     <string name="login_panel_cancel">取消</string>
     <string name="drawer_setting">选项</string>
     <string name="drawer_mark">标记</string>
+    <string name="team_account_hint">对方账号</string>
+    <string name="team_send">发送</string>
+
 </resources>

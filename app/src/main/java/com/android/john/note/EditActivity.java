@@ -38,6 +38,7 @@ import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -90,6 +93,12 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
     private Button mGalleryButton;
     private int mContentEditTextWidth;
     private CardView mCardview;
+    private ImageButton mTeamButton;
+    private MaterialDialog TeamPanel;
+    private TextView mTeamSend;
+    private TextView mTeamCancel;
+    private EditText mTeamAccount;
+    private ImageButton mScanButton;
 
     //手指向右滑动时的最小速度
     private static final int XSPEED_MIN = 200;
@@ -177,6 +186,44 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
 //
             }
         });
+        TeamPanel =new MaterialDialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.team_popup_window, null);
+        TeamPanel.setView(view);
+        TeamPanel.setCanceledOnTouchOutside(true);
+        mTeamButton=(ImageButton)findViewById(R.id.edit_team);
+        mTeamAccount=(EditText)view.findViewById(R.id.team_account);
+        mTeamButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TeamPanel.show();
+            }
+        });
+        mTeamSend=(TextView)view.findViewById(R.id.team_send);
+        mTeamCancel=(TextView)view.findViewById(R.id.team_cancel);
+        mTeamSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),mTeamAccount.getText().toString(),Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        mTeamCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TeamPanel.dismiss();
+            }
+        });
+        mScanButton.findViewById(R.id.edit_scan);
+        mScanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });
+
+
+
 
         UUID id = (UUID) getIntent().getSerializableExtra("UUID");
 
@@ -369,6 +416,8 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
                 ColorChoosePanel.show();
             }
         });
+       ListView listView;
+
     }
 
     private void changeColor(String color) {
@@ -506,15 +555,35 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         int velocity = (int) mVelocityTracker.getXVelocity();
         return Math.abs(velocity);
     }
-    //关闭输入法
-    private void closeInputMethod() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        boolean isOpen = imm.isActive();
-        if (isOpen) {
-            // imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);//没有显示则显示
-            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-        }
-    }
+    public Bitmap scaledownBitmap(InputStream input){
+                int maxSize=1024*1024*1024;
+                int ratio=1;
+
+                Bitmap tmp=null;
+                Bitmap scaled_bitmap=null;
+                try {
+                        tmp=BitmapFactory.decodeStream(input);
+                    if(tmp.getByteCount()>maxSize)
+                       ratio =tmp.getByteCount()/maxSize;
+                    else
+                        ratio=1;
+
+                    BitmapFactory.Options options=new BitmapFactory.Options();
+                    options.inSampleSize=ratio;
+                    scaled_bitmap=BitmapFactory.decodeStream(input,null,options);
+
+                    Log.v("originSize",String.valueOf(tmp.getByteCount()));
+                    Log.v("ratio",String.valueOf(ratio));
+                    Log.v("scaledSize",String.valueOf(scaled_bitmap.getByteCount()));
+
+
+                } catch (Exception e) {
+                        e.printStackTrace();
+                     }
+
+                 return scaled_bitmap;
+            }
+
 
 
 }

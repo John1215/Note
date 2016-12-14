@@ -31,7 +31,7 @@ public class HandwritingView extends View {
 
     private Path mCurrentPath;
     private myPath mCurrentMyPath;
-    private List<myPath> mPaths = new ArrayList<>(20);
+    private List<myPath> mPaths = new ArrayList<>();
     private Paint mBoxPaint;
     private Paint mRubberPaint;
     private Paint mBackgroundPaint;
@@ -55,7 +55,6 @@ public class HandwritingView extends View {
     //Used when inflating the view from xml
     public HandwritingView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         mBoxPaint = new Paint();
         mBoxPaint.setAntiAlias(true);
         mBoxPaint.setStrokeWidth(50);
@@ -64,30 +63,19 @@ public class HandwritingView extends View {
         mBoxPaint.setAntiAlias(true);
         mBoxPaint.setStrokeJoin(Paint.Join.ROUND);
         mBoxPaint.setStrokeCap(Paint.Cap.ROUND);
-        mBitmap=Bitmap.createBitmap(400,400, Bitmap.Config.ARGB_8888);
-
-
-//        mRubberPaint.setColor(0x22ff2222);
-////        mRubberPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-//        mBoxPaint.setAntiAlias(true);
-//        mBoxPaint.setStrokeWidth(5);
-//        mBoxPaint.setStyle(Paint.Style.STROKE);
-
+        mBitmap=Bitmap.createBitmap(10,10, Bitmap.Config.ARGB_8888);
         mRubberPaint = new Paint();
-//        mRubberPaint.setAlpha(0);
-//        mRubberPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
         mRubberPaint.setColor(0xffffffff);
         mRubberPaint.setAntiAlias(true);
         mRubberPaint.setStrokeWidth(50);
         mRubberPaint.setStyle(Paint.Style.STROKE);
-
         mBackgroundPaint = new Paint();
         mBackgroundPaint.setColor(0xffffffff);
-
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         PointF current = new PointF(event.getX(), event.getY());
         String action = "";
 
@@ -129,10 +117,12 @@ public class HandwritingView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+
         if(delete_flag){
             canvas.drawPaint(mBackgroundPaint);
             mPaths.clear();
-            mBitmap=Bitmap.createBitmap(400,400, Bitmap.Config.ARGB_8888);
+            mBitmap=Bitmap.createBitmap(getWidth(),getHeight(), Bitmap.Config.ARGB_8888);
+            //mBitmap.setPixel(getWidth(),getHeight(),Color.WHITE);
             delete_flag=false;
         }
         mSrcRect =new Rect(0,0,getWidth(),getHeight());
@@ -184,7 +174,6 @@ public class HandwritingView extends View {
 
     public void saveDrawing(Context context) {
         Bitmap bitmap = getBitmap();
-
         File dir = new File(context.getFilesDir(), "Bitmap");
         System.out.println("directory:" + context.getFilesDir());
         if (!dir.exists()) {
@@ -205,6 +194,9 @@ public class HandwritingView extends View {
     public Bitmap getBitmap() {
         Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        canvas.drawRect(0, 0, bitmap.getWidth(), bitmap.getHeight(), paint);
         draw(canvas);
         return bitmap;
     }
