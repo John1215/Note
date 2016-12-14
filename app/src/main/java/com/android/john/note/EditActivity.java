@@ -1,16 +1,23 @@
 package com.android.john.note;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -43,6 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.john.note.R;
+import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,6 +73,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
     private static final int REQUEST_IMAGE_CAMERA = 1;
     private static final int REQUEST_IMAGE_GALLERY = 2;
     private static final int REQUEST_HANDWRITING = 3;
+    private static final int REQUEST_IMAGE_SCAN=4;
 
     //状态栏隐藏
     private void setHideStatus() {
@@ -217,8 +226,10 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         mScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
+                Intent getImage = new Intent(Intent.ACTION_GET_CONTENT);
+                getImage.addCategory(Intent.CATEGORY_OPENABLE);
+                getImage.setType("image/*");
+                startActivityForResult(getImage, REQUEST_IMAGE_SCAN);
             }
         });
 
@@ -297,7 +308,11 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-            } else if(requestCode == REQUEST_IMAGE_GALLERY){
+            }else if(requestCode == REQUEST_IMAGE_SCAN){
+                Uri originUri=data.getData();
+                String text =OCR(scaledownBitmap(originUri));
+            }
+            else if(requestCode == REQUEST_IMAGE_GALLERY){
                 mImageMaterialDialog.dismiss();
                 Uri originUri = data.getData();
                 try {
@@ -352,6 +367,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
                             dstMap, null, imagePath));
                 }
             }
+
         }
     }
 
@@ -555,14 +571,17 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         int velocity = (int) mVelocityTracker.getXVelocity();
         return Math.abs(velocity);
     }
-    public Bitmap scaledownBitmap(InputStream input){
+    public Bitmap scaledownBitmap(Uri uri){
+
+        ContentResolver resolver = getContentResolver();
+
                 int maxSize=1024*1024*1024;
                 int ratio=1;
 
                 Bitmap tmp=null;
                 Bitmap scaled_bitmap=null;
                 try {
-                        tmp=BitmapFactory.decodeStream(input);
+                        tmp=BitmapFactory.decodeStream(resolver.openInputStream(uri));
                     if(tmp.getByteCount()>maxSize)
                        ratio =tmp.getByteCount()/maxSize;
                     else
@@ -570,7 +589,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
 
                     BitmapFactory.Options options=new BitmapFactory.Options();
                     options.inSampleSize=ratio;
-                    scaled_bitmap=BitmapFactory.decodeStream(input,null,options);
+                    scaled_bitmap=BitmapFactory.decodeStream(resolver.openInputStream(uri),null,options);
 
                     Log.v("originSize",String.valueOf(tmp.getByteCount()));
                     Log.v("ratio",String.valueOf(ratio));
@@ -584,6 +603,56 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
                  return scaled_bitmap;
             }
 
+    static final String CHINESE_LANGUAGE = "chi_sim";
+    static final String TESSBASE_PATH = "/storage/emulated/0/tesseract/";
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
+    public String OCR(Bitmap bitmap){
+        int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+        Bitmap bmp =  bitmap;
+        bmp = bitmap2Gray(bmp);
+//        bmp = gray2Binary(bmp);
+        TessBaseAPI baseApi = new TessBaseAPI();
+        //初始化OCR的训练数据路径与语言
+        baseApi.init(TESSBASE_PATH, CHINESE_LANGUAGE);
+        //设置识别模式
+//        baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO);
+        //设置要识别的图片
+        baseApi.setImage(bmp);
+        String text = baseApi.getUTF8Text();
+        baseApi.clear();
+        baseApi.end();
+        Toast.makeText(getApplicationContext(),text,Toast.LENGTH_SHORT).show();
+        return text;
+    }
+
+    public Bitmap bitmap2Gray(Bitmap bmSrc) {
+        // 得到图片的长和宽
+        int width = bmSrc.getWidth();
+        int height = bmSrc.getHeight();
+        // 创建目标灰度图像
+        Bitmap bmpGray = null;
+        bmpGray = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        // 创建画布
+        Canvas c = new Canvas(bmpGray);
+        Paint paint = new Paint();
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0);
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+        paint.setColorFilter(f);
+        c.drawBitmap(bmSrc, 0, 0, paint);
+        return bmpGray;
+    }
 
 }
