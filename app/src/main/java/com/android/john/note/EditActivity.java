@@ -14,7 +14,9 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -107,7 +109,8 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
     private TextView mTeamSend;
     private TextView mTeamCancel;
     private EditText mTeamAccount;
-    private ImageButton mScanButton;
+    private ImageButton mOCRButton;
+//    private TessBaseAPI baseApi;
 
     //手指向右滑动时的最小速度
     private static final int XSPEED_MIN = 200;
@@ -148,6 +151,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         mImageMaterialDialog.setCanceledOnTouchOutside(true);
         mImageMaterialDialog.setView(selectView);
         //mImageMaterialDialog.
+
         mCameraButton = (Button) selectView.findViewById(R.id.camera_button);
         mGalleryButton = (Button) selectView.findViewById(R.id.gallery_button);
         mGalleryButton.setOnClickListener(new View.OnClickListener() {
@@ -222,16 +226,18 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
                 TeamPanel.dismiss();
             }
         });
-        mScanButton.findViewById(R.id.edit_scan);
-        mScanButton.setOnClickListener(new View.OnClickListener() {
+        mOCRButton=(ImageButton) findViewById(R.id.edit_ocr);
+        mOCRButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getApplication(),"yes",Toast.LENGTH_SHORT).show();
                 Intent getImage = new Intent(Intent.ACTION_GET_CONTENT);
                 getImage.addCategory(Intent.CATEGORY_OPENABLE);
                 getImage.setType("image/*");
                 startActivityForResult(getImage, REQUEST_IMAGE_SCAN);
             }
         });
+
 
 
 
@@ -260,6 +266,21 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
             mContentEditText.setText(spannableString);
         }
         mDateTextView.setText(mNoteItem.getFormatDateString());
+
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                baseApi = new TessBaseAPI();
+//                //初始化OCR的训练数据路径与语言
+//                baseApi.init(TESSBASE_PATH, CHINESE_LANGUAGE);
+//            }
+//        }).start();
+//        baseApi = new TessBaseAPI();
+//        //初始化OCR的训练数据路径与语言
+//        baseApi.init(TESSBASE_PATH, CHINESE_LANGUAGE);
+        //设置识别模式
+//        baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO);
 
 //
     }
@@ -310,7 +331,13 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
                 }
             }else if(requestCode == REQUEST_IMAGE_SCAN){
                 Uri originUri=data.getData();
-                String text =OCR(scaledownBitmap(originUri));
+                Toast.makeText(getApplicationContext(),"正在识别请稍后",Toast.LENGTH_LONG).show();
+                mOCRButton.setClickable(false);
+                new OCRTask().execute(scaledownBitmap(originUri));
+//                String text =OCR(scaledownBitmap(originUri));
+
+//                Toast.makeText(getApplicationContext(),text,Toast.LENGTH_SHORT).show();
+//                mContentEditText.append(text);
             }
             else if(requestCode == REQUEST_IMAGE_GALLERY){
                 mImageMaterialDialog.dismiss();
@@ -574,6 +601,7 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
     public Bitmap scaledownBitmap(Uri uri){
 
         ContentResolver resolver = getContentResolver();
+              long startTime= System.currentTimeMillis();
 
                 int maxSize=1024*1024*1024;
                 int ratio=1;
@@ -599,6 +627,8 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
                 } catch (Exception e) {
                         e.printStackTrace();
                      }
+        long endTime=System.currentTimeMillis();
+        Log.v("scale",String.valueOf(endTime-startTime));
 
                  return scaled_bitmap;
             }
@@ -623,22 +653,26 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         Bitmap bmp =  bitmap;
         bmp = bitmap2Gray(bmp);
 //        bmp = gray2Binary(bmp);
+        long startTime= System.currentTimeMillis();
         TessBaseAPI baseApi = new TessBaseAPI();
         //初始化OCR的训练数据路径与语言
         baseApi.init(TESSBASE_PATH, CHINESE_LANGUAGE);
         //设置识别模式
-//        baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO);
+        baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO);
+        long endTime= System.currentTimeMillis();
+        Log.v("init",String.valueOf(endTime-startTime));
         //设置要识别的图片
         baseApi.setImage(bmp);
         String text = baseApi.getUTF8Text();
         baseApi.clear();
         baseApi.end();
-        Toast.makeText(getApplicationContext(),text,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),text,Toast.LENGTH_SHORT).show();
         return text;
     }
 
     public Bitmap bitmap2Gray(Bitmap bmSrc) {
         // 得到图片的长和宽
+        long startTime=System.currentTimeMillis();
         int width = bmSrc.getWidth();
         int height = bmSrc.getHeight();
         // 创建目标灰度图像
@@ -652,7 +686,33 @@ public class EditActivity extends AppCompatActivity implements View.OnTouchListe
         ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
         paint.setColorFilter(f);
         c.drawBitmap(bmSrc, 0, 0, paint);
+        long endTime= System.currentTimeMillis();
+        Log.v("gray",String.valueOf(endTime-startTime));
         return bmpGray;
+    }
+
+    public class OCRTask extends AsyncTask<Bitmap,Void,String>{
+        long startTime= System.currentTimeMillis();
+        @Override
+        protected String doInBackground(Bitmap... bitmaps) {
+            Log.i(TAG, "OCR ing.......");
+
+            return OCR(bitmaps[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            //Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
+            mContentEditText.append(s);
+            Toast.makeText(getApplicationContext(),"识别完成！",Toast.LENGTH_SHORT).show();
+            mOCRButton.setClickable(true);
+            long endTime= System.currentTimeMillis();
+            Log.v("ocr",String.valueOf(endTime-startTime));
+        }
+
+
+
     }
 
 }

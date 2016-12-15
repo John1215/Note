@@ -137,7 +137,7 @@
                     app:srcCompat="@drawable/ic_edit_handwriting"/>
 
                 <ImageButton
-                    android:id="@+id/edit_scan"
+                    android:id="@+id/edit_ocr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/edit_handwriting"
@@ -152,7 +152,7 @@
                     android:id="@+id/edit_team"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/edit_scan"
+                    android:layout_alignLeft="@id/edit_ocr"
                     android:layout_marginLeft="@dimen/btn_margin"
                     android:background="@null"
                     android:paddingLeft="5dp"
